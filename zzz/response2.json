@@ -1,0 +1,53 @@
+[{
+        "tier1": {
+            "_hasTextInput": false,
+            "_hasOptionInput": true,
+            "selected": "option1",
+            "textValue": null,
+            "optionValue": "Yes",
+            "_path": {
+                "_curr": { "tier": 1, "comp": 1 },
+                "_sentTo": { "tier": 2, "comp": 2 }
+            }
+        }
+    },
+    {
+        "tier2": {
+            "_hasTextInput": false,
+            "_hasOptionInput": true,
+            "selected": "option1",
+            "textValue": null,
+            "optionValue": "Hemophilia A",
+            "_path": {
+                "_curr": { "tier": 2, "comp": 1 },
+                "_sentTo": { "tier": 3, "comp": 1 }
+            }
+        }
+    },
+    {
+        "tier3": {
+            "_hasTextInput": true,
+            "_hasOptionInput": false,
+            "selected": "option1",
+            "textValue": "Amanuel Abiy",
+            "optionValue": "Name",
+            "_path": {
+                "_curr": { "tier": 3, "comp": 1 },
+                "_sentTo": { "tier": 4, "comp": 1 }
+            }
+        }
+    },
+    {
+        "tier4": {
+            "_hasTextInput": true,
+            "_hasOptionInput": false,
+            "selected": "option1",
+            "textValue": 21,
+            "optionValue": "Age",
+            "_path": {
+                "_curr": { "tier": 4, "comp": 1 },
+                "_sentTo": { "tier": 5, "comp": 1 }
+            }
+        }
+    }
+]

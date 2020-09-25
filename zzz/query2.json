@@ -1,0 +1,87 @@
+[{
+        "tier1": {
+            "comp1": {
+                "query": "Are you a hemophilic patient?",
+                "options": {
+                    "option1": {
+                        "text": "Yes",
+                        "_goto": { "tier": 2, "comp": 1 },
+                        "_inputMedia": null
+                    },
+                    "option2": {
+                        "text": "No",
+                        "_goto": { "tier": 0, "comp": 0 },
+                        "_inputMedia": null
+                    }
+                },
+                "_meta": {
+                    "_textInput": false,
+                    "_optionInput": true
+                }
+            }
+        }
+    },
+    {
+        "tier2": {
+            "comp1": {
+                "query": "Do you have Hemophilia A or B?",
+                "options": {
+                    "option1": {
+                        "text": "Hemophilia A",
+                        "_goto": { "tier": 3, "comp": 1 },
+                        "_inputMedia": null
+                    },
+                    "option1=2": {
+                        "text": "Hemophilia B",
+                        "_goto": { "tier": 3, "comp": 1 },
+                        "_inputMedia": null
+                    }
+                },
+                "_meta": {
+                    "_textInput": false,
+                    "_optionInput": true
+                }
+            }
+        }
+    },
+    {
+        "tier3": {
+            "comp1": {
+                "query": "What is your name?",
+                "options": {
+                    "option1": {
+                        "text": "Name",
+                        "_goto": { "tier": 4, "comp": 1 },
+                        "_inputMedia": {
+                            "_dataType": "String"
+                        }
+                    }
+                },
+                "_meta": {
+                    "_textInput": true,
+                    "_optionInput": false
+                }
+            }
+        }
+    },
+    {
+        "tier4": {
+            "comp1": {
+                "query": "What is your Age?",
+                "options": {
+                    "option1": {
+                        "text": "Age",
+                        "_goto": { "tier": 5, "comp": 1 },
+                        "_inputMedia": {
+                            "_dataType": "Number"
+                        }
+                    }
+                },
+                "_meta": {
+                    "_textInput": true,
+                    "_optionInput": false
+                }
+            }
+        }
+    }
+]

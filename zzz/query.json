@@ -1,0 +1,62 @@
+[{
+    "tier1": {
+        "comp1": {
+            "query": "Are u a user or admin?",
+            "options": {
+                "option1": {
+                    "text": "Admin",
+                    "_goto": { "tier": 2, "comp": 1 },
+                    "_inputMeta": null
+
+                },
+                "option2": {
+                    "text": "User",
+                    "_goto": { "tier": 2, "comp": 2 },
+                    "_inputMeta": null
+                }
+            },
+            "_meta": {
+                "_textInput": false,
+                "_optionInput": true
+            }
+        }
+    }
+}, {
+    "tier2": {
+        "comp1": {
+            "query": "Do you work on 1st or 3rd floor?",
+            "options": {
+                "option1": {
+                    "text": "1st floor",
+                    "_goto": { "tier": 3, "comp": 1 },
+                    "_inputMeta": null
+                },
+                "option2": {
+                    "text": "3rd floor",
+                    "_goto": { "tier": 3, "comp": 1 },
+                    "_inputMeta": null
+                }
+            },
+            "_meta": {
+                "_textInput": false,
+                "_optionInput": true
+            }
+        },
+        "comp2": {
+            "query": "Please enter your email",
+            "options": {
+                "option1": {
+                    "text": "Email?",
+                    "_goto": { "tier": 3, "comp": 3 },
+                    "_inputMeta": {
+                        "_dataType": "String"
+                    }
+                }
+            },
+            "_meta": {
+                "_textInput": true,
+                "_optionInput": false
+            }
+        }
+    }
+}]

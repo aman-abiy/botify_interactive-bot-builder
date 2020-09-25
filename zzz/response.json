@@ -1,0 +1,25 @@
+[{
+    "tier1": {
+        "_hasTextInput": false,
+        "_hasOptionInput": true,
+        "selected": "option2",
+        "textValue": null,
+        "optionValue": "User",
+        "_path": {
+            "_curr": { "tier": 1, "comp": 1 },
+            "_sentTo": { "tier": 2, "comp": 2 }
+        }
+    }
+}, {
+    "tier2": {
+        "_hasTextInput": true,
+        "_hasOptionInput": false,
+        "selected": "option1",
+        "textValue": "amexabiy@gmail.com",
+        "optionValue": "Email",
+        "_path": {
+            "_curr": { "tier": 2, "comp": 2 },
+            "_sentTo": { "tier": 3, "comp": 3 }
+        }
+    }
+}]
