@@ -22,6 +22,12 @@ const QuerySchema = mongoose.Schema({
         ref: 'Subscriber',
         required: [true, 'A reference to this subscriber not found']
     },
+    status: {
+        // 0 -> closed, 1 -> active
+        type: Number,
+        default: 1,
+        required: true
+    },
     createdAt: {
         type: Date,
         default: Date.now(),

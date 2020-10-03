@@ -1,0 +1,28 @@
+.container .card {
+    border-color: transparent;
+}
+
+.container .card h5 {
+    font-size: 19px;
+}
+
+.container .card {
+    font-size: 13px;
+}
+
+.container .card .btn {
+    font-size: 15px;
+    color: rgb(3, 204, 204);
+    font-weight: 600;
+    float: right;
+    background-color: rgb(216, 253, 253);
+    padding: 5px 8px 5px 8px;
+}
+
+.container .card img {
+    height: 250px;
+}
+
+.container .selected {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}

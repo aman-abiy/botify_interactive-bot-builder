@@ -1,62 +1,69 @@
 [{
-    "tier1": {
-        "comp1": {
-            "query": "Are u a user or admin?",
-            "options": {
-                "option1": {
-                    "text": "Admin",
-                    "_goto": { "tier": 2, "comp": 1 },
-                    "_inputMeta": null
+    "tiers": [{
+            "tier": 1,
+            "components": [{
+                "comp": 1,
+                "query": "Are u a user or admin?",
+                "options": [{
+                        "opt": 1,
+                        "text": "Admin",
+                        "_goto": { "tier": 2, "comp": 1 },
+                        "_inputMeta": null
 
-                },
-                "option2": {
-                    "text": "User",
-                    "_goto": { "tier": 2, "comp": 2 },
-                    "_inputMeta": null
+                    },
+                    {
+                        "opt": 2,
+                        "text": "User",
+                        "_goto": { "tier": 2, "comp": 2 },
+                        "_inputMeta": null
+                    }
+                ],
+                "_meta": {
+                    "_textInput": false,
+                    "_optionInput": true
                 }
-            },
-            "_meta": {
-                "_textInput": false,
-                "_optionInput": true
-            }
-        }
-    }
-}, {
-    "tier2": {
-        "comp1": {
-            "query": "Do you work on 1st or 3rd floor?",
-            "options": {
-                "option1": {
-                    "text": "1st floor",
-                    "_goto": { "tier": 3, "comp": 1 },
-                    "_inputMeta": null
-                },
-                "option2": {
-                    "text": "3rd floor",
-                    "_goto": { "tier": 3, "comp": 1 },
-                    "_inputMeta": null
-                }
-            },
-            "_meta": {
-                "_textInput": false,
-                "_optionInput": true
-            }
+            }]
         },
-        "comp2": {
-            "query": "Please enter your email",
-            "options": {
-                "option1": {
-                    "text": "Email?",
-                    "_goto": { "tier": 3, "comp": 3 },
-                    "_inputMeta": {
-                        "_dataType": "String"
+        {
+            "tier": 2,
+            "components": [{
+                    "comp": 1,
+                    "query": "Do you work on 1st or 3rd floor?",
+                    "options": [{
+                            "opt": 1,
+                            "text": "1st floor",
+                            "_goto": { "tier": 3, "comp": 1 },
+                            "_inputMeta": null
+                        },
+                        {
+                            "opt": 2,
+                            "text": "3rd floor",
+                            "_goto": { "tier": 3, "comp": 1 },
+                            "_inputMeta": null
+                        }
+                    ],
+                    "_meta": {
+                        "_textInput": false,
+                        "_optionInput": true
+                    }
+                },
+                {
+                    "comp": 2,
+                    "query": "Please enter your email",
+                    "options": [{
+                        "opt": 1,
+                        "text": "Email?",
+                        "_goto": { "tier": 3, "comp": 3 },
+                        "_inputMeta": {
+                            "_dataType": "String"
+                        }
+                    }],
+                    "_meta": {
+                        "_textInput": true,
+                        "_optionInput": false
                     }
                 }
-            },
-            "_meta": {
-                "_textInput": true,
-                "_optionInput": false
-            }
+            ]
         }
-    }
+    ]
 }]

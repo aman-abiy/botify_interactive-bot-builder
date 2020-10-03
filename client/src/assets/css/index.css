@@ -1,0 +1,95 @@
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    position: relative;
+}
+
+
+/* header items */
+
+.header {
+    height: 95vh;
+    position: relative;
+    top: 26vh;
+}
+
+.main-title {
+    font-weight: 600;
+    color: #383838;
+}
+
+.sub-title {
+    color: #63636e;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+.header-text-box-learn-more {
+    color: rgb(3, 204, 204);
+    font-size: 15px;
+    font-weight: 500;
+    margin-left: 2%;
+}
+
+.header-text-box-learn-more:hover {
+    color: rgb(1, 165, 165);
+    cursor: pointer;
+}
+
+.header-buttons {
+    position: relative;
+    top: 14vh;
+}
+
+.header-buttons .how-it-works-btn {
+    border-color: #268af5;
+    margin-right: 10px;
+}
+
+.header-buttons .how-it-works-btn:hover {
+    color: rgb(255, 255, 255);
+    background-color: #268af5;
+    border-color: rgb(255, 255, 255);
+}
+
+.header-title {
+    position: relative;
+    top: 10vh;
+    color: #63636e;
+    font-size: 20px;
+    font-family: 'Nunito', sans-serif;
+}
+
+.header-title-horizontal-line {
+    width: 100px;
+    border: #268af5 3px solid;
+    border-radius: 5px;
+}
+
+
+/* description cards */
+
+.description {
+    background-color: rgb(245, 249, 252);
+    padding: 50px;
+}
+
+.description-card-title {
+    color: rgb(5, 211, 211);
+    font-size: 18px;
+    font-weight: 600;
+    padding-left: 10px;
+}
+
+.description-card-text {
+    line-height: 1.7;
+    color: #74747c;
+    font-size: 15px;
+}
+
+.description-card-text p {
+    padding-left: 10px;
+    padding-right: 10px;
+}
