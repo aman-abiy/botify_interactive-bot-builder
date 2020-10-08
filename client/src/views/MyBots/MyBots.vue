@@ -1,6 +1,6 @@
 <template>
     <div>
-        <navbarDelete v-if="Object.values(this.checkboxArray).includes(true)"/>
+        <navbarDelete :botsToDelete="checkboxArray" v-if="Object.values(this.checkboxArray).includes(true)"/>
         <navbar v-else/>
         <br>
         <br>
@@ -18,7 +18,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
-                                    {{ bot.title }}
+                                    {{ bot.title.charAt(0).toUpperCase() + bot.title.slice(1) }}
                                 </div>
                                 <div class="col-lg-2">
                                     Status
@@ -44,7 +44,7 @@ import footer from '@/components/footer';
 export default {
     data: function(){
         return {
-            checkboxArray: this.fillCheckboxArray()
+            checkboxArray: this.fillCheckboxArray(),
         }
     },
     components: {
@@ -86,5 +86,9 @@ export default {
 .card-body {
     padding: 0px;
     margin: 0px;
+}
+
+.form-check-input:hover{
+    cursor: pointer;
 }
 </style>

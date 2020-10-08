@@ -14,8 +14,14 @@ const QuerySchema = mongoose.Schema({
         required: true
     },
     avatar: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Subscriber',
+        type: String,
+        enum: ['untitled.png', 'untitled2.png', 'untitled3.png', 'untitled4.png', 'untitled5.png', 'untitled6.png', 'none'],
+        default: 'none'
+    },
+    theme: {
+        type: String,
+        enum: ['light', 'dark'],
+        default: 'light'
     },
     subscriber: {
         type: mongoose.Schema.ObjectId,

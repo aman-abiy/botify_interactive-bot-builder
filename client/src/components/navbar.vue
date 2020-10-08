@@ -17,7 +17,7 @@
                         <!--<a class="nav-link" href="#">My.Bots</a>-->
                     </li>
                     <li class="nav-item nav-item_auth">
-                        <router-link :to="{ name: 'BotMaker'}" :class="['nav-link']">CREATE</router-link>
+                        <router-link :to="{ name: 'Create'}" :class="['nav-link']">CREATE</router-link>
                         <!--<a class="nav-link" href="./botMaker.html">CREATE</a>-->
                     </li>
                     <li class="profile-link nav-item dropdown">

@@ -14,6 +14,6 @@ router.put('/update/:queryId', queryController.update);
 
 router.put('/changeStatus/:queryId', queryController.changeStatus);
 
-router.delete('/delete/:queryId', queryController.delete);
+router.delete('/delete/:queryIds', queryController.delete);
 
 module.exports = router;

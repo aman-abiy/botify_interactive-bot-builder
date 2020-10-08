@@ -6,7 +6,7 @@
             </div>
             <div class="chat-container col-lg-4 col-md-12 col-sm-12 ">
                 <div class="row reply-bot">
-                    <img src="../assets/images/avatars/Untitled2.png" alt="">
+                    <img src="../assets/images/avatars/untitled2.png" alt="">
                     <div class="card-container">
                         <div class="card">
                             <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Similique unde corporis fugit consectetur nihil laboriosam veniam molestiae iusto velit? Eum magni quas tempora, vero possimus nihil neque corporis error exercitationem.</p>
@@ -20,13 +20,13 @@
                             <p>Amanuel</p>
                         </div>
                     </div>
-                    <img src="../assets/images/avatars/Untitled2.png" alt="">
+                    <img src="../assets/images/avatars/untitled2.png" alt="">
                 </div>
                 <br>
                 <br>
                 <br>
                 <div class="row reply-bot">
-                    <img src="../assets/images/avatars/Untitled2.png" alt="">
+                    <img src="../assets/images/avatars/untitled2.png" alt="">
                     <div class="card-container">
                         <div class="card">
                             <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Similique unde corporis fugit consectetur nihil laboriosam veniam molestiae iusto velit? Eum magni quas tempora, vero possimus nihil neque corporis error exercitationem.</p>
@@ -40,13 +40,13 @@
                             <p>Amanuel</p>
                         </div>
                     </div>
-                    <img src="../assets/images/avatars/Untitled2.png" alt="">
+                    <img src="../assets/images/avatars/untitled2.png" alt="">
                 </div>
                 <br>
                 <br>
                 <br>
                 <div class="row reply-bot">
-                    <img src="../assets/images/avatars/Untitled2.png" alt="">
+                    <img src="../assets/images/avatars/untitled2.png" alt="">
                     <div class="card-container">
                         <div class="card">
                             <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Similique unde corporis fugit consectetur nihil laboriosam veniam molestiae iusto velit? Eum magni quas tempora, vero possimus nihil neque corporis error exercitationem.</p>
@@ -60,13 +60,13 @@
                             <p>Amanuel</p>
                         </div>
                     </div>
-                    <img src="../assets/images/avatars/Untitled2.png" alt="">
+                    <img src="../assets/images/avatars/untitled2.png" alt="">
                 </div>
                 <br>
                 <br>
                 <br>
                 <div class="row reply-bot">
-                    <img src="../assets/images/avatars/Untitled2.png" alt="">
+                    <img src="../assets/images/avatars/untitled2.png" alt="">
                     <div class="card-container">
                         <div class="card">
                             <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Similique unde corporis fugit consectetur nihil laboriosam veniam molestiae iusto velit? Eum magni quas tempora, vero possimus nihil neque corporis error exercitationem.</p>

@@ -89,11 +89,18 @@ const routes = [{
             import ('../views/Create.vue'),
         beforeEnter: authGuard
     },
+    {
+        path: '/publish',
+        name: 'Publish',
+        component: () =>
+            import ('../views/Publish.vue'),
+        beforeEnter: authGuard
+    },
 
     // BOT
 
     {
-        path: '/bot',
+        path: '/bot/:id',
         name: 'Bot',
         component: () =>
             import ('../views/Bot.vue')

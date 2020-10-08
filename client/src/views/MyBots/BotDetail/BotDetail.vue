@@ -6,7 +6,10 @@
         <br>
         <br>
         <div class="container">
-            <p class="offset-lg-9 offset-md-5 offset-sm-3">Id: {{ this.$route.params.botId }}</p>
+            <div class="row link-row">
+                <span v-clipboard="() => `http://localhost:8080/bot/${this.$route.params.botId}`" v-on:click="copyLink()" class="offset-lg-7 offset-md-3"><i class="far fa-clone"></i></span>
+                <router-link :to="{name: 'Bot', params: {'id': this.$route.params.botId }}" target="_blank" class="link "> https://localhost:8080/bot/{{ this.$route.params.botId }}</router-link>
+            </div>
             <div class="row">
                 <div class="col-lg-6">
                     <div class="card">
@@ -50,16 +53,14 @@
                                 :axisStep="Math.ceil(Math.max(...last30Days.data[1]) / 10)"
                                 :axis-full-mode="true"
                                 :labels="[ '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30' ]"
-                                :names="names"
                                 :values="last30Days.data[1]" class="col-lg-12">
                             <note :text="'Last 30 days performance'">Last 30 days performance</note>
-                            <tooltip :names="names" :position="'right'"></tooltip>
-                            <legends :names="names"></legends>
+                            <tooltip :names="['Chats']" :position="'right'"></tooltip>
+                            <legends :names="['Chats']"></legends>
                             <guideline :tooltip-y="true"></guideline>
                         </graph-line>
                     </div>
                 </div>
-                {{values}}
             </div>
         </div>
     </div>
@@ -70,8 +71,7 @@ import footer from '@/components/footer';
 export default {
     data: function() {
         return {
-            names: [ 'MS', 'Apple', 'Google' ],
-            values: last30Days.data[1]
+            link: '555'   
         }
     },
     components: {
@@ -88,6 +88,9 @@ export default {
     methods: {
         changeStatus() {
             this.$store.dispatch('changeQueryStatus', this.$route.params.botId)
+        },
+        copyLink(){
+            this.$toast.open('coppied to clipboard');
         }
     },
     created() {
@@ -100,8 +103,25 @@ export default {
 }
 </script>
 <style scoped>
+
+
 .bot-id {
     float: right;
+}
+
+.container .link-row {
+    margin-left: 45px;
+}
+
+.container .link-row span {
+    cursor: pointer;
+}
+
+.container .link {
+    font-size: 15px;
+    font-family: 'Nunito', sans-serif;
+    margin-left: 15px;
+    margin-bottom: 15px;
 }
 
 .card {

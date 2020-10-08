@@ -3,9 +3,10 @@ import store from '../store'
 
 export default async(to, from, next) => {
     try {
-        const result = await axios.get('/auth/validateAuth', { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
+        const result = await axios.get('/auth/validateAuth')
         console.log('result', result)
         if (!result.data.status) {
+            localStorage.removeItem('token')
             next({ name: 'Login' })
         }
     } catch (error) {

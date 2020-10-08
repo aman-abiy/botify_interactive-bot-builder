@@ -2,13 +2,14 @@
     <div>
     <div class="level">
             <div class="row level-row justify-content-between">
-                <h5 class="level-text ">Level: {{levelCount[0]}}</h5>
-                <a href="# " v-on:click="addComponent();" class="btn btn-primary add-component offset-lg-10 ">Add Component</a><br>
+                <h5 class="level-text "><span v-on:click="removeLevel(levelCount[0])"><i class="fas fa-times close-icon"></i></span> Level: {{levelCount[0]}}</h5>
+                <!--<span>{{levelCount[0]}}</span>-->
+                <a href="# " v-on:click="addComponent();" class="btn btn-primary add-component offset-lg-9 ">Add Component</a><br>
             </div>
-            {{levelsObject}}
+            <!-- <span>{{levelsObject}}</span> -->
             <div class="row ">
                 <template class="row" v-for="(child, index) in children">
-                    <component class="col-lg-3" :components="children" :currentLevel="levelCount[0]" :componentArray="componentArray" @fromComponent="addTier($event, levelCount[0])" :is="child" :key="child.name" ></component>
+                    <component class="col-lg-3" :components="children" @removeComponent="children.splice($event, 1)" :currentLevel="levelCount[0]" :componentArray="componentArray" @fromComponent="addTier($event, levelCount[0])" :is="child" :key="child.name" ></component>
                 </template>        
             </div>
             <span v-show="false">{{pushLevelCount}}</span>
@@ -65,6 +66,10 @@ export default {
         addTier(compo, level) {
             console.log("TTTTTTTTTTTTTIER", compo)
             this.tier.push(compo, level)
+        },
+        removeLevel(index) {
+            console.log('Deleted, index', index)
+            this.$emit('removeLevel', index - 1)
         }
     }
 }
@@ -92,6 +97,20 @@ body {
 
 .components {
     margin-top: 5px;
+}
+
+.level h5 span{
+    height: 30px;
+}
+
+.level h5 span .close-icon {
+    height: 8px;
+    padding: 1px 3px 15px 3px;
+    color: rgb(3, 204, 204);
+}
+
+.level h5 span:hover {
+    cursor: pointer;
 }
 
 .card {

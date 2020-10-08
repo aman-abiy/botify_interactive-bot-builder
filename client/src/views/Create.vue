@@ -1,14 +1,40 @@
 <template>
     <div class="container">
-        <!--<navbar/>-->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <a v-on:click="goBack()" class="btn btn-preview text-primary nav-link" style="padding: 2px 5px 2px 5px; font-size: 15px; margin-left: 5%">Back</a>
+                <ul class="navbar-nav offset-lg-8">
+                    <li class="nav-item nav-item_auth">
+                       <a v-on:click="" class="btn btn-preview text-primary nav-link" style="padding: 2px 5px 2px 5px; font-size: 15px; ">Preview</a>
+                    </li>
+                    <li class="nav-item nav-item_auth">
+                        <a v-on:click="complete()" class="btn btn-complete text-light btn-primary nav-link" style="padding: 2px 5px 2px 5px; font-size: 15px; ">Complete</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!--<navbar/>
         <br>
         <br>
+        <br>-->
         <br>
-        <!--<a v-on:click="" class="btn text-light add-level offset-lg-11" style="padding: 2px 5px 2px 5px; font-size: 15px; ">Next<i style="margin-left: 5px" class="fas fa-chevron-right"></i></a>-->
-        <template class="row" v-for="(child, index) in children">
-            <component class="col-lg-12"  :level="children" :levelsArray="levelsArray" :is="child" :key="child.name" ></component>
-        </template>
-        <a v-on:click="addLevel()" class="btn text-light add-level " style="padding: 2px 5px 2px 5px; font-size: 13px; ">Add Level</a>           
+        <br>
+        <p>From STORE -> {{componentLevelData}}</p>
+        <!-- <div class="finilize-btns offset-lg-10">
+            <div class="row">
+                <a v-on:click="" class="btn btn-preview text-primary" style="padding: 2px 5px 2px 5px; font-size: 15px; ">Preview</a>
+                <a v-on:click="" class="btn btn-complete text-light" style="padding: 2px 5px 2px 5px; font-size: 15px; ">Complete</a>
+            </div>
+        </div> -->
+        <br>
+        <div class="row">
+            <div class="col-lg-11">
+               <template class="row" v-for="(child, index) in children">
+                    <component class=""  :level="children" @removeLevel="children.splice($event, 1)" :levelsArray="levelsArray" :is="child" :key="child.name" ></component>
+                </template>
+                <a v-on:click="addLevel()" class="btn text-light add-level " style="padding: 2px 5px 2px 5px; font-size: 13px; ">Add Level</a>
+            </div>
+        </div>
         
     </div>
 </template>
@@ -17,6 +43,9 @@ import level from '@/components/create-bot/level';
 import navbar from '@/components/navbar';
 import footer from '@/components/footer';
 export default {
+    components: {
+        navbar, level
+    },
     data: function() {
         return {
             children: [level],
@@ -32,8 +61,10 @@ export default {
             }]
         }
     },
-    components: {
-        navbar, level
+    computed: {
+        componentLevelData() {
+            return this.$store.getters.COMPONENT_LEVEL_DATA;
+        }
     },
     methods: {
         addLevel() {
@@ -46,6 +77,12 @@ export default {
                     options: []
                 }]
             })
+        },
+        goBack() {
+            this.$router.go(-1);
+        },
+        complete() {
+            this.$router.push({ name: 'Publish' });
         }
     }
 }
@@ -66,7 +103,39 @@ body {
     box-shadow: none;
 }
 
+/* nav */
+
+.navbar {
+    background: linear-gradient(to right bottom, rgb(240, 248, 248), rgb(240, 248, 248));
+}
+
+.navbar {
+    color: #161c2d;
+    background-color: rgb(255, 255, 255);
+    border-bottom: rgb(239, 241, 241) 2px solid;
+}
+
+.nav-item {
+    margin-left: 30%;
+}
+
+.nav-item a {
+    font-weight: 550;
+    color: #6b6c6e;
+}
+
 /* main */
+
+.finilize-btns .btn-preview{
+    font-weight: 600;
+    background-color: rgb(217, 247, 247);
+    margin-right: 20px;
+}
+
+.finilize-btns .btn-complete{
+    background-color: #0e80fa;
+    margin-right: 50px;
+}
 
 .horizontal-separator {
     border-bottom: rgb(239, 241, 241) 2px solid;
@@ -76,25 +145,6 @@ body {
     margin-top: 5px;
 }
 
-.card {
-    padding: 0px;
-    font-style: 13px;
-    font-family: 'Nunito', sans-serif;
-    border-radius: 0rem;
-    margin-right: 50px;
-    padding-bottom: 0px;
-}
-
-.card .card-body {
-    font-style: 13px;
-    padding-bottom: 5px;
-    margin: 0px;
-}
-
-.card-body .content_input_section div textarea {
-    padding-bottom: 0px;
-    margin-bottom: 0px;
-}
 
 .add-buttons {
     position: relative;
@@ -118,6 +168,10 @@ body {
 .add-buttons .btn:focus {
     outline: none !important;
     box-shadow: none;
+}
+
+.btn-publish{
+    margin-bottom: 10px
 }
 
 textarea {
@@ -166,39 +220,20 @@ textarea:focus {
     box-shadow: none;
 }
 
-.container .add-level {
+.add-level {
     padding: 5px;
     background-color: rgb(3, 204, 204);
     border-color: rgb(3, 204, 204)
 }
-
-.container .add-level:hover {
+.add-level:hover {
     color: #ffffff;
     background-color: rgb(13, 221, 221);
     border-color: rgb(13, 221, 221);
 }
 
-.container .add-level:focus {
+.add-level:focus {
     outline: none !important;
     box-shadow: none;
-}
-
-.card-body .row .user-added-buttons {
-    padding: 3px 5px 3px 5px;
-    margin: 0px;
-    font-size: 13px;
-    color: white;
-    background-color: #0a76eb;
-}
-
-.card-body .row .user-added-input {
-    outline: none !important;
-    box-shadow: none;
-    border-color: rgb(95, 99, 99);
-    height: 23px;
-    font-size: 13px;
-    border-color: rgb(177, 175, 175);
-    padding-left: 5px
 }
 
 .goto {

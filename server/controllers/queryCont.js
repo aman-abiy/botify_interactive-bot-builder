@@ -4,7 +4,16 @@ const Response = require('../models/Response');
 
 exports.add = async(req, res, next) => {
     req.body.subscriber = mongoose.Types.ObjectId(req.subscriber._id);
-    const query = await Query.create(req.body);
+    req.body.title = req.body.title.toLowerCase();
+    let query = await Query.find({ title: req.body.title });
+    console.log(query)
+    if (query[0]) {
+        return res.status(200).json({
+            status: false,
+            message: `A bot with the title '${req.body.title}' already exists`
+        })
+    }
+    query = await Query.create(req.body);
     if (!query) {
         return res.status(200).json({
             status: false,
@@ -13,6 +22,9 @@ exports.add = async(req, res, next) => {
     }
     return res.status(200).json({
         status: true,
+        data: {
+            id: query._id
+        }
     })
 }
 
@@ -83,13 +95,21 @@ exports.update = async(req, res, next) => {
 }
 
 exports.delete = async(req, res, next) => {
-    const queryId = req.body.queryId;
+    let toDeleteArray = req.params.queryIds
+    toDeleteArray = toDeleteArray.split(',')
+    console.log(toDeleteArray)
+    toDeleteArray = toDeleteArray.map((value) => mongoose.Types.ObjectId(value))
+    console.log(toDeleteArray)
 
-    let query = await Query.findById(queryId);
-    if (!query) {
-        return next(new ErrorResponse(`No query found qith Id ${queryId}`), 200);
+    let query = await Query.find({ _id: { $in: toDeleteArray } });
+    console.log(query.length, toDeleteArray.length)
+    if (query.length != toDeleteArray.length) {
+        return res.status(200).json({
+            status: false,
+            msg: 'Some bot may not exist'
+        })
     }
-    await Query.findByIdAndDelete(queryId);
+    await Query.deleteMany({ _id: { $in: toDeleteArray } });
     return res.status(200).json({
         status: true
     })

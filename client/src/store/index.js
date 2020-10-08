@@ -17,7 +17,8 @@ export default new Vuex.Store({
         last30Days: null,
         //queries
         query: null,
-        allQueries: null
+        allQueries: null,
+        COMPONENT_LEVEL_DATA: null
     },
     getters: {
         token: state => state.token,
@@ -26,7 +27,8 @@ export default new Vuex.Store({
         allResponse: state => state.allResponse,
         query: state => state.query,
         allQueries: state => state.allQueries,
-        last30Days: state => state.last30Days
+        last30Days: state => state.last30Days,
+        COMPONENT_LEVEL_DATA: state => state.COMPONENT_LEVEL_DATA,
     },
     mutations: {
         setToken: (state, payload) => { state.token = payload },
@@ -37,7 +39,8 @@ export default new Vuex.Store({
         setLast30Days: (state, payload) => { state.last30Days = payload },
         //queries
         setQuery: (state, payload) => { state.query = payload },
-        setAllQueries: (state, payload) => { state.allQueries = payload }
+        setAllQueries: (state, payload) => { state.allQueries = payload },
+        set_COMPONENT_LEVEL_DATA: (state, payload) => { state.COMPONENT_LEVEL_DATA = payload }
     },
     actions: {
         signup: async({ commit }, payload) => {
@@ -132,7 +135,40 @@ export default new Vuex.Store({
             } catch (error) {
                 console.log(error)
             }
-        }
+        },
+
+        addQuery: async({ commit }, payload) => {
+            try {
+                const result = await axios.post('/query/add', payload);
+                console.log(result.data.status)
+                if (result.data.status) {
+                    router.push({ name: 'BotDetail', params: { 'botId': result.data.data.id } }).catch((err) => {
+                        console.log('error');
+                        router.push({ name: 'BotDetail', params: { 'botId': result.data.data.id } })
+                        commit('set_COMPONENT_LEVEL_DATA', null)
+                    });
+                    commit('set_COMPONENT_LEVEL_DATA', null)
+                }
+                // show error message
+                router.push({ name: 'Publish' })
+                console.log("QUERRY ADD RESULT +>", result)
+            } catch (error) {
+                console.log(error)
+            }
+        },
+
+        deleteQuery: async({ commit }, payload) => {
+            try {
+                const result = await axios.delete(`/query/delete/${payload}`);
+                if (result.data.status) {
+                    router.go(0)
+                }
+                //show error message
+                router.push({ name: 'MyBots' })
+            } catch (error) {
+                console.log(error)
+            }
+        },
     },
     plugins: [createPersistedState()],
     modules: {}

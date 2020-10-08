@@ -4,8 +4,9 @@
             <div class="card" style="width: 15.5rem; background-color: rgb(253, 253, 253); ">
                 <div class="card-body">
                     <div class="row content_input_section">
+                        <span v-on:click="removeComponent(componentCount[0])"><i class="fas fa-times close-icon"></i></span>
                         <div class="col-lg-8 col-md-8 col-sm-6">
-                        {{currentLevel}}
+                        <!-- <span>{{componentCount[0]}}</span> -->
                             <textarea v-on:input="getQuery(componentCount[0], $event)" name=" " id=" " cols="21" rows="5" placeholder="Enter text here..." style="font-size: 13px; margin-top: 5px"></textarea>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 add-buttons ">
@@ -14,20 +15,26 @@
                         </div>
                     </div>
                     <span v-show="false">{{pushComponentCount}}</span>
-                    {{componentCount[0]}}
-                    {{componentArray}}
-                    <!-- <p class="goto_text ">Go to:</p>
+                    <!-- <span>{{componentCount[0]}}
+                    {{componentArray}}</span> -->
+                    <p class="goto_text ">Go to:</p>
                     <div class="row user-added-components ">
                         <div class="col-lg-12 col-md-12 col-sm-12 ">
-                            <div class="row user-controls justify-content-between ">
-                                <input type="text " class="col-4 form-control user-added-input " data-toggle="popover-user-added-comp" tabindex="0" data-html="true " placeholder="Email " readonly>
-                                <span class="goto ">level <input type="text " placeholder="0 ">component <input type="text " placeholder="0 "></span>
-                            </div>
+                            <template v-for="option in componentObjects[0].tiers[this.currentLevel - 1].components[componentCount[0] - 1].options">
+                                <div v-if="option._inputMeta" class="row user-controls justify-content-between ">
+                                    <input type="text " class="col-4 form-control user-added-input " data-toggle="popover-user-added-comp" tabindex="0" data-html="true " :placeholder="option.text" readonly>
+                                    <span class="goto ">level <input type="text " :placeholder="option._goTo.tier">component <input type="text " :placeholder="option._goTo.comp"></span>
+                                </div>
+                                <div v-else class="row user-controls justify-content-between ">
+                                    <a href="# " class="btn user-added-buttons " data-toggle="popover-user-added-comp" data-html="true ">{{ option.text }}</a>
+                                    <span class="goto ">level <input type="text " :placeholder="option._goTo.tier">component <input type="text " :placeholder="option._goTo.comp"></span>
+                                </div>
+                            </template>   
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 ">
 
                         </div>
-                    </div> -->
+                    </div> 
                 </div>
             </div>
         </div>
@@ -131,32 +138,37 @@ export default {
             console.log(this.componentObjects[0], this.currentLevel)
             this.componentObjects[0].tiers[this.currentLevel - 1].components[index - 1].query = $event.target.value;
             // this.componentObjects[index - 1].query = $event.target.value;
+            this.$store.commit('set_COMPONENT_LEVEL_DATA', this.componentObjects)
             console.log(index, $event.target.value, this.componentObjects[index - 1].query)
         },
-
-
         addButton(index) {
-            this.componentObjects[index - 1].options.push({
-                opt: (this.componentObjects[index - 1].options.length + 1),
+            this.componentObjects[0].tiers[this.currentLevel - 1].components[index - 1].options.push({
+                opt: ( this.componentObjects[0].tiers[this.currentLevel - 1].components[index - 1].options.length + 1),
                 text: this.texts.buttonTxt,
                 _goTo: { tier: this.goTo.tier, comp: this.goTo.comp},
                 _inputMeta: null
             })
+            this.$store.commit('set_COMPONENT_LEVEL_DATA', this.componentObjects)
             this.resetValues()
             this.$emit('fromComponent', this.comps);
         },
         addInput(index) {
-            this.componentObjects[index - 1].options.push({
-                opt: (this.componentObjects[index - 1].options.length + 1),
+            this.componentObjects[0].tiers[this.currentLevel - 1].components[index - 1].options.push({
+                opt: ( this.componentObjects[0].tiers[this.currentLevel - 1].components[index - 1].options.length + 1),
                 text: this.texts.inputTxt,
                 _goTo: { tier: this.goTo.tier, comp: this.goTo.comp},
                 _inputMeta: {
                     _dataType: Object.values(this.inputType).find(element => element != null)
                 }
             })
-            this.componentObjects[0].tiers[0].components[index - 1]
+            this.$store.commit('set_COMPONENT_LEVEL_DATA', this.componentObjects)
             this.resetValues()
             this.$emit('fromComponent', this.comps);
+        },
+        removeComponent(index) {
+            console.log("CLICKEEED")
+            this.$emit('removeComponent', index - 1)
+            console.log(this.componentObjects[0].tiers[this.currentLevel - 1].components.splice([index - 1]))
         },
         resetValues(){
             this.texts.buttonTxt = null
@@ -173,9 +185,158 @@ export default {
 </script>
 <style scoped>
 @import url('https://pro.fontawesome.com/releases/v5.10.0/css/all.css');
+.components {
+    margin-top: 5px;
+}
+
+.btn:focus {
+    outline: none !important;
+    box-shadow: none;
+}
+
+input:focus {
+    outline: none !important;
+    box-shadow: none;
+}
+
+.card {
+    padding: 0px;
+    font-style: 13px;
+    font-family: 'Nunito', sans-serif;
+    border-radius: 0rem;
+    margin-right: 50px;
+    padding-bottom: 0px;
+}
+
+.card .card-body {
+    font-style: 13px;
+    padding-top: 12px;
+    padding-bottom: 5px;
+    margin: 0px;
+}
+
+.card .card-body span{
+    height: 30px;
+}
+
+.card .card-body span .close-icon {
+    position: absolute;
+    left: 92%;
+    bottom: 87%;
+    height: 8px;
+    border: 1px solid #007bff;
+    padding: 1px 3px 15px 3px;
+    color: rgb(3, 204, 204);
+}
+
+.card .card-body span:hover {
+    cursor: pointer;
+}
+
+.card-body .content_input_section div textarea {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+.add-buttons {
+    position: relative;
+    left: 1%;
+    margin-bottom: 5px;
+}
+
+.add-buttons .btn {
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    color: #1d85f5;
+    font-weight: 600;
+    font-size: 14px;
+    border: white 0px transparent;
+}
+
+.add-buttons .btn:hover {
+    color: rgb(3, 204, 204);
+}
+
+.add-buttons .btn:focus {
+    outline: none !important;
+    box-shadow: none;
+}
+
+textarea {
+    margin: 0px;
+    position: relative;
+    bottom: 9px;
+    right: 12px;
+    background-color: rgb(253, 253, 253);
+    border-color: rgb(185, 255, 255);
+}
+
+textarea:focus {
+    outline: none !important;
+    background-color: white;
+    border-color: rgb(159, 250, 250);
+}
+
+.card-body .row .user-added-buttons {
+    padding: 3px 5px 0px 5px;
+    margin: 0px;
+    font-size: 13px;
+    color: white;
+    background-color: #0a76eb;
+}
+
+.card-body .row .user-added-input {
+    outline: none !important;
+    box-shadow: none;
+    border-color: rgb(95, 99, 99);
+    height: 23px;
+    font-size: 13px;
+    border-color: rgb(177, 175, 175);
+    padding-left: 5px
+}
+
+.goto {
+    font-size: 13px;
+    margin-left: 2px;
+    float: right;
+}
+
+.card .goto input {
+    font-size: 13px;
+    width: 25px;
+    height: 20px;
+    border: none;
+    outline: none !important;
+    border-bottom: 1px solid rgb(80, 197, 197);
+}
+
+.goto input:focus {
+    outline: none !important;
+    border-color: rgb(231, 228, 228);
+    border-radius: 4px;
+}
+
+.goto_text {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 0px;
+    margin: 0px;
+    position: relative;
+    left: 35%;
+}
+
+.user-controls {
+    margin-bottom: 5px;
+}
+
+.fa-plus {
+    font-size: 13px;
+    margin: 0px 3px 0px 0px;
+}
+
 .overlay{
     position: fixed;
-    top: 0%;
+    top: 6%;
     right: 0px;
     bottom: 0px;
     left: 0px;
@@ -237,136 +398,4 @@ export default {
     font-weight: 600;
     color: rgb(80, 197, 197);
 }
-
-.components {
-    margin-top: 5px;
-}
-
-.btn:focus {
-    outline: none !important;
-    box-shadow: none;
-}
-
-input:focus {
-    outline: none !important;
-    box-shadow: none;
-}
-
-.card {
-    padding: 0px;
-    font-style: 13px;
-    font-family: 'Nunito', sans-serif;
-    border-radius: 0rem;
-    margin-right: 50px;
-    padding-bottom: 0px;
-}
-
-.card .card-body {
-    font-style: 13px;
-    padding-top: 12px;
-    padding-bottom: 5px;
-    margin: 0px;
-}
-
-.card-body .content_input_section div textarea {
-    padding-bottom: 0px;
-    margin-bottom: 0px;
-}
-
-.add-buttons {
-    position: relative;
-    left: 2%;
-    bottom: 8px;
-}
-
-.add-buttons .btn {
-    margin: 0px 0px 0px 0px;
-    padding: 0px;
-    color: #1d85f5;
-    font-weight: 600;
-    font-size: 14px;
-    border: white 0px transparent;
-}
-
-.add-buttons .btn:hover {
-    color: rgb(3, 204, 204);
-}
-
-.add-buttons .btn:focus {
-    outline: none !important;
-    box-shadow: none;
-}
-
-textarea {
-    margin: 0px;
-    position: relative;
-    bottom: 9px;
-    right: 12px;
-    background-color: rgb(253, 253, 253);
-    border-color: rgb(185, 255, 255);
-}
-
-textarea:focus {
-    outline: none !important;
-    background-color: white;
-    border-color: rgb(159, 250, 250);
-}
-
-.card-body .row .user-added-buttons {
-    padding: 3px 5px 3px 5px;
-    margin: 0px;
-    font-size: 13px;
-    color: white;
-    background-color: #0a76eb;
-}
-
-.card-body .row .user-added-input {
-    outline: none !important;
-    box-shadow: none;
-    border-color: rgb(95, 99, 99);
-    height: 23px;
-    font-size: 13px;
-    border-color: rgb(177, 175, 175);
-    padding-left: 5px
-}
-
-.goto {
-    font-size: 13px;
-    margin-left: 2px;
-    float: right;
-}
-
-.card .goto input {
-    font-size: 13px;
-    width: 25px;
-    height: 20px;
-    border: none;
-    outline: none !important;
-    border-bottom: 1px solid rgb(80, 197, 197);
-}
-
-.goto input:focus {
-    outline: none !important;
-    border-color: rgb(231, 228, 228);
-    border-radius: 4px;
-}
-
-.goto_text {
-    font-size: 13px;
-    font-weight: 600;
-    padding: 0px;
-    margin: 0px;
-    position: relative;
-    left: 35%;
-}
-
-.user-controls {
-    margin-bottom: 5px;
-}
-
-.fa-plus {
-    font-size: 13px;
-    margin: 0px 3px 0px 0px;
-}
-
 </style>
