@@ -1,8 +1,13 @@
 <template>
     <div>
+        <!--CHECKING FOR CONNECTION STATUS-->
+        <template>
+            <!-- @detected-condition fires when the connectivity status of the device changes -->
+            <offline @detected-condition="handleConnectivityChange">
+            </offline>
+        </template>
         <nav v-if="token" class="navbar nav_auth navbar_auth navbar-expand-lg fixed-top">
             <router-link :to="{ name: 'Dashboard'}" :class="['navbar-brand navbar-brand_auth']">botapp.com</router-link>
-            <!--<a class="navbar-brand navbar-brand_auth" href="#">botapp.com</a>-->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -10,25 +15,20 @@
                 <ul class="navbar-nav">
                     <li class="nav-item nav-item_auth">
                         <router-link :to="{ name: 'Dashboard'}" :class="['nav-link', currentPage.endsWith('/dashboard') ? 'router-auth' : '']">Dashboard</router-link>
-                        <!--<a class="nav-link" href="#">Dashboard</a>-->
                     </li>
                     <li class="nav-item nav-item_auth">
                         <router-link :to="{ name: 'MyBots'}" :class="['nav-link', currentPage.includes('/myBots') ? 'router-auth' : '']">My<span style="margin-left: 3px">Bots</span></router-link>
-                        <!--<a class="nav-link" href="#">My.Bots</a>-->
                     </li>
                     <li class="nav-item nav-item_auth">
                         <router-link :to="{ name: 'Create'}" :class="['nav-link']">CREATE</router-link>
-                        <!--<a class="nav-link" href="./botMaker.html">CREATE</a>-->
                     </li>
                     <li class="profile-link nav-item dropdown">
                         <a class="nav-link btn-primary dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ email ? email.split('@')[0] : 'Account' }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <router-link :to="{ name: 'Usecases'}" :class="['dropdown-item']">Account</router-link>
-                            <!--<a class="dropdown-item" href="#">Account</a>-->
+                            <router-link :to="{ name: 'Account'}" :class="['dropdown-item']">Account</router-link>
                             <div class="dropdown-divider"></div>
-                            <!-- <router-link :to="{ name: 'Usecases'}" :class="['dropdown-item logout']">Logout</router-link> -->
                             <a class="dropdown-item logout" v-on:click="logout()">Logout</a>
                         </div>
                     </li>
@@ -40,7 +40,6 @@
         <nav v-else class="navbar navbar_without_auth navbar-expand-lg fixed-top">
             <div class="container">
                 <router-link :to="{ name: 'Index'}" :class="['navbar-brand']">botapp.com</router-link>
-                <!--<a class="navbar-brand" href="#">botapp.com</a>-->
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
@@ -49,7 +48,6 @@
                     <ul class="navbar-nav ">
                         <li class="nav-item">
                             <router-link :to="{ name: 'Services'}" :class="['nav-link', currentPage.endsWith('/services') ? 'router-without-auth' : '']">Services</router-link>
-                            <!--<a class="nav-link" href="#">Services</a>-->
                         </li>
                         <li class="nav-item dropdown">
                             <a :class="[currentPage.endsWith('/usecases') ? 'router-without-auth' : '', 'nav-link dropdown-toggle']" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -64,15 +62,12 @@
                         </li>
                         <li class="nav-item">
                             <router-link :to="{ name: 'Services'}" :class="['nav-link', currentPage.endsWith('/example') ? 'router-without-auth' : '']" tabindex="-1" aria-disabled="true">Example</router-link>
-                            <!--<a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Example</a>-->
                         </li>
                         <li class="auth-buttons auth-button1">
                             <router-link :to="{ name: 'Login'}" :class="['btn router-link']" tabindex="-1" aria-disabled="true">Login</router-link>
-                            <!--<a class="btn" href="login.html" tabindex="-1" aria-disabled="true">Login</a>-->
                         </li>
                         <li class="auth-buttons auth-button2">
                             <router-link :to="{ name: 'Signup'}" :class="['btn router-link btn-primary']" tabindex="-1" aria-disabled="true"><span>Get<span style="margin-left: 3px">Started</span></span></router-link>
-                            <!--<a class="btn btn-primary" href="signup.html" tabindex="-1" aria-disabled="true"><span>Get<span style="margin-left: 3px">Started</span></span></a>-->
                         </li>
                     </ul>
                 </div>
@@ -82,7 +77,16 @@
 </template>
 
 <script>
+import offline from 'v-offline';
+
 export default {
+    data: function() {
+        return {
+        }
+    },
+    components: {
+        offline
+    },
     computed: {
         token() {
             return localStorage.getItem('token')
@@ -92,12 +96,29 @@ export default {
         },
         email() {
             return this.$store.getters.email;
+        },
+        checkConnection(){
+            if(navigator.onLine){
+                return this.$toast.open('online');
+            }else {
+                return this.$toast.open('coppied to clipboard');
+            }
         }
     },
     methods: {
         logout() {
             this.$store.dispatch('logout');
+        },
+        handleConnectivityChange(status) {
+            if(status) {
+                this.$toast.open('You are back online', { duration: 10000});
+            }
+            if(!status) {
+                this.$toast.error('You are offline', { duration: 60000});
+            }
         }
+    },
+    created() {
     }
 }
 </script>

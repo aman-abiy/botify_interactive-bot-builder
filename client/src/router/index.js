@@ -96,6 +96,12 @@ const routes = [{
             import ('../views/Publish.vue'),
         beforeEnter: authGuard
     },
+    {
+        path: '/account',
+        name: 'Account',
+        component: () =>
+            import ('../views/Account.vue')
+    },
 
     // BOT
 

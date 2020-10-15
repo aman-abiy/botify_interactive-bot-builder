@@ -35,82 +35,31 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card bots-container-card">
-                        <h5 class="text-center text-primary">My Bots</h5>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <div class="card text-center">
-                                    <div class="row">
-                                        <div class="col-lg-1">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                        <h5 class="text-center text-primary">Active Bots</h5>
+                        <template v-if="activeBots" v-for="(bot) in activeBots">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="card text-center">
+                                        <div class="row">
+                                            <div class="col-lg-1">
                                             </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            Party registration for birthday
-                                        </div>
-                                        <div class="col-lg-2">
-                                            Status
-                                        </div>
-                                        <div class="col-lg-2">
-                                            4 Chats
-                                        </div>
-                                        <div class="col-lg-2">
-                                            <a href="./botDetail.html">more</a>
+                                            <div class="col-lg-4">
+                                                {{ bot.title.charAt(0).toUpperCase() + bot.title.slice(1) }}
+                                            </div>
+                                            <div class="col-lg-2">
+                                                Status
+                                            </div>
+                                            <div class="col-lg-2">
+                                                {{ bot.combined.length }} Chats
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <router-link :to="{ name: 'BotDetail', params: { 'botId': bot._id } }">more</router-link>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <div class="card text-center">
-                                    <div class="row">
-                                        <div class="col-lg-1">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            Survey data collection
-                                        </div>
-                                        <div class="col-lg-2">
-                                            Status
-                                        </div>
-                                        <div class="col-lg-2">
-                                            4 Chats
-                                        </div>
-                                        <div class="col-lg-2">
-                                            <a href="">more</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <div class="card text-center">
-                                    <div class="row">
-                                        <div class="col-lg-1">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            Food delivery
-                                        </div>
-                                        <div class="col-lg-2">
-                                            Status
-                                        </div>
-                                        <div class="col-lg-2">
-                                            85 Chats
-                                        </div>
-                                        <div class="col-lg-2">
-                                            <a href="">more</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -123,7 +72,7 @@ import footer from '../components/footer';
 export default {
     data: function() {
         return {
-            c: this.allBots
+            c: this.allBots,
         }
     },
     components: {
@@ -132,10 +81,14 @@ export default {
     computed: {
         allBots() {
             return this.$store.getters.allQueries;
-        } 
+        },
+        activeBots() {
+            return this.$store.getters.activeQueries;
+        }
     },
     created() {
         this.$store.dispatch('getAllQueries')
+        this.$store.dispatch('getActiveQueries')
     },
 }
 </script>

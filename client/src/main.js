@@ -10,6 +10,7 @@ import { ValidationObserver } from 'vee-validate';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-default.css';
 import Clipboard from 'v-clipboard'
+import VOffline from 'v-offline';
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
@@ -22,6 +23,7 @@ Vue.component('ValidationObserver', ValidationObserver)
 Vue.use(VueGraph)
 Vue.use(Clipboard)
 Vue.use(VueToast, { dismissible: true });
+Vue.component('VOffline', require('v-offline'));
 
 Vue.config.productionTip = false
 

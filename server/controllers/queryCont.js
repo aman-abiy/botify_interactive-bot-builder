@@ -30,7 +30,9 @@ exports.add = async(req, res, next) => {
 
 exports.get = async(req, res, next) => {
     const queryId = req.params.queryId;
-    const query = await Query.find({ subscriber: mongoose.Types.ObjectId(req.subscriber._id), _id: queryId })
+    console.log('Q', req.params.queryId)
+    console.log('S', req.subscriber._id)
+    const query = await Query.find({ subscriber: mongoose.Types.ObjectId(req.subscriber._id), _id: mongoose.Types.ObjectId(queryId) })
     if (!query) {
         return res.status(200).json({
             status: false,
@@ -40,6 +42,36 @@ exports.get = async(req, res, next) => {
     return res.status(200).json({
         status: true,
         data: query
+    })
+}
+
+exports.getActive = async(req, res, next) => {
+    const queries = await Query.aggregate([{
+            $lookup: {
+                from: 'responses',
+                localField: '_id',
+                foreignField: 'query',
+                as: 'combined'
+            }
+        },
+        {
+            $match: {
+                'subscriber': mongoose.Types.ObjectId(req.subscriber._id),
+                'status': 1
+            }
+        }
+    ])
+
+    // const query = await Query.find({ subscriber: mongoose.Types.ObjectId(req.subscriber._id), status: { $eq: false } })
+    if (!queries) {
+        return res.status(200).json({
+            status: false,
+            message: 'No active Bots found'
+        })
+    }
+    return res.status(200).json({
+        status: true,
+        data: queries
     })
 }
 

@@ -30,7 +30,7 @@
         <div class="row">
             <div class="col-lg-11">
                <template class="row" v-for="(child, index) in children">
-                    <component class=""  :level="children" @removeLevel="children.splice($event, 1)" :levelsArray="levelsArray" :is="child" :key="child.name" ></component>
+                    <component class="" :level="children" @removeLevel="children.splice($event, 1)" :levelsArray="levelsArray" :is="child" :key="child.name" ></component>
                 </template>
                 <a v-on:click="addLevel()" class="btn text-light add-level " style="padding: 2px 5px 2px 5px; font-size: 13px; ">Add Level</a>
             </div>

@@ -6,7 +6,7 @@ export default async(to, from, next) => {
         const result = await axios.get('/auth/validateAuth')
         console.log('result', result)
         if (!result.data.status) {
-            localStorage.removeItem('token')
+            // localStorage.removeItem('token')
             next({ name: 'Login' })
         }
     } catch (error) {

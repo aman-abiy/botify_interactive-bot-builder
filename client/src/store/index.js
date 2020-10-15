@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import router from '../router'
 import createPersistedState from "vuex-persistedstate";
+import { json2excel, excel2json } from 'js2excel';
+import { Parser } from 'json2csv';
 
 Vue.use(Vuex)
 
@@ -13,10 +15,13 @@ export default new Vuex.Store({
         email: null,
         authErrorMessage: null,
         //chats
+        response: null,
         allResponse: null,
         last30Days: null,
         //queries
         query: null,
+        botQuery: null,
+        activeQueries: null,
         allQueries: null,
         COMPONENT_LEVEL_DATA: null
     },
@@ -24,8 +29,11 @@ export default new Vuex.Store({
         token: state => state.token,
         email: state => state.email,
         authErrorMessage: state => state.authErrorMessage,
+        response: state => state.response,
         allResponse: state => state.allResponse,
         query: state => state.query,
+        botQuery: state => state.botQuery,
+        activeQueries: state => state.activeQueries,
         allQueries: state => state.allQueries,
         last30Days: state => state.last30Days,
         COMPONENT_LEVEL_DATA: state => state.COMPONENT_LEVEL_DATA,
@@ -35,10 +43,13 @@ export default new Vuex.Store({
         setEmail: (state, payload) => { state.email = payload },
         setAuthErrorMessage: (state, payload) => { state.authErrorMessage = payload },
         //chats
+        setResponse: (state, payload) => { state.response = payload },
         setAllResponses: (state, payload) => { state.allResponse = payload },
         setLast30Days: (state, payload) => { state.last30Days = payload },
         //queries
         setQuery: (state, payload) => { state.query = payload },
+        setBotQuery: (state, payload) => { state.botQuery = payload },
+        setActiveQueries: (state, payload) => { state.activeQueries = payload },
         setAllQueries: (state, payload) => { state.allQueries = payload },
         set_COMPONENT_LEVEL_DATA: (state, payload) => { state.COMPONENT_LEVEL_DATA = payload }
     },
@@ -83,7 +94,7 @@ export default new Vuex.Store({
         getResponse: async({ commit }, payload) => {
             try {
                 const result = await axios.get(`/response/get/${payload}`);
-                return result.data;
+                commit('setResponse', result.data.data)
             } catch (error) {
                 console.log(error)
             }
@@ -103,7 +114,37 @@ export default new Vuex.Store({
         getQuery: async({ commit }, payload) => {
             try {
                 const result = await axios.get(`/query/get/${payload}`);
-                commit('setQuery', result.data);
+                if (result.data.status) {
+                    commit('setQuery', result.data);
+                }
+                // show error message
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        // get query for actual BOT chatting
+        getBotQuery: async({ commit }, payload) => {
+            try {
+                const result = await axios.get(`/query/get/${payload}`);
+                console.log(result.data.status)
+                console.log(result.data.data)
+                if (result.data.status) {
+                    commit('setBotQuery', result.data.data);
+                }
+                // show error message
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        // get Active Queries
+        getActiveQueries: async({ commit }) => {
+            try {
+                const result = await axios.get(`/query/getActive`);
+                if (result.data.status) {
+                    commit('setActiveQueries', result.data.data);
+                }
+                // show error
+                console.log(result.data.data)
             } catch (error) {
                 console.log(error)
             }
@@ -165,6 +206,67 @@ export default new Vuex.Store({
                 }
                 //show error message
                 router.push({ name: 'MyBots' })
+            } catch (error) {
+                console.log(error)
+            }
+        },
+
+        downloadResponses: async({ commit }, payload) => {
+            try {
+                const result = await axios({ method: 'get', url: `/response/download/${payload.fmt}/${payload.queryId}` });
+                console.log(result.data.data)
+                if (result.data.status) {
+                    if (payload.fmt === 'excel') {
+                        try {
+                            json2excel({
+                                data: result.data.data,
+                                name: 'user-info-data'
+                                    // formateDate: 'yyyy/mm/dd'
+                            });
+                        } catch (e) {
+                            console.error('export error');
+                        }
+                    }
+                    //to download in json format
+                    if (payload.fmt === 'json') {
+                        const result = await axios({ method: 'get', url: `/response/download/${payload.fmt}/${payload.queryId}`, responseType: 'blob' });
+
+                        var fileURL = window.URL.createObjectURL(new Blob([result.data]));
+                        var fileLink = document.createElement('a');
+
+                        fileLink.href = fileURL;
+                        fileLink.setAttribute('download', `${Date.now().toString()}.json`);
+                        document.body.appendChild(fileLink);
+
+                        fileLink.click();
+                    }
+
+                    if (payload.fmt === 'csv') {
+                        const fields = result.data.data.map((value, index) => value[index] ? value[index].query : '');
+                        const opts = { fields };
+
+                        try {
+                            const parser = new Parser(opts);
+                            const csv = parser.parse(result.data.data);
+                            var fileURL = window.URL.createObjectURL(new Blob([csv]));
+                            var fileLink = document.createElement('a');
+
+                            fileLink.href = fileURL;
+                            fileLink.setAttribute('download', `${Date.now().toString()}.csv`);
+                            document.body.appendChild(fileLink);
+
+                            fileLink.click();
+                            console.log(csv);
+                        } catch (err) {
+                            console.error(err);
+                        }
+                    }
+
+
+
+                }
+                //show error message
+                // router.push({ name: 'MyBots' })
             } catch (error) {
                 console.log(error)
             }

@@ -4,8 +4,9 @@ const Query = require('../models/Query');
 const ErrorResponse = require('../utils/errorResponse');
 
 exports.add = async(req, res, next) => {
-    //cast queryId to type ObjectId
-    req.body.query = mongoose.Types.ObjectId(req.body.query);
+    const queryId = req.params.queryId;
+
+    req.body.query = mongoose.Types.ObjectId(queryId);
     let query = await Query.findById(req.body.query);
     if (!query) {
         return next(new ErrorResponse(`No related query found for this response`), 200);
@@ -23,25 +24,34 @@ exports.get = async(req, res, next) => {
     let response = await Response.findById(req.params.responseId);
     console.log(response)
     if (!response) {
-        return next(new ErrorResponse(`No response found by the ID ${responseId}`), 200);
+        return res.status(200).json({
+            status: false,
+            msg: `No response found by the ID ${responseId}`
+        })
     }
     let query = await Query.findById(response.query)
     if (!query) {
-        return next(new ErrorResponse(`No related query found for this response`), 200);
+        return res.status(200).json({
+            status: false,
+            msg: `No related query found for this response`
+        })
     }
     responseJSON = response.response_data[0]
     queryJSON = query.query_data[0]
+        // console.log('query =>', queryJSON, '\n \n')
+        // console.log('response =>', responseJSON, '\n \n')
     let dataSet = [];
     for (let x = 0; x < responseJSON.length; x++) {
         let selectedValue = null;
         let textValue = null;
-        const curr = responseJSON[x][`tier${x+1}`]._path._curr;
-        const query = queryJSON[x][`tier${x+1}`][`comp${curr.comp}`].query;
-        selectedValue = responseJSON[x][`tier${x+1}`].optionValue;
-        if (!queryJSON[x][`tier${x+1}`][`comp${curr.comp}`]._meta._textInput) {
+        const currTier = responseJSON[x]._path._curr.tier;
+        const currComp = responseJSON[x]._path._curr.comp;
+        const query = queryJSON[0].tiers[x].components[currComp - 1].query;
+        selectedValue = responseJSON[x].optionValue;
+        if (!queryJSON[0].tiers[x].components[currComp - 1].options[responseJSON[x].selected_opt - 1]._inputMeta) {
             textValue = null;
         }
-        textValue = responseJSON[x][`tier${x+1}`].textValue;
+        textValue = responseJSON[x].textValue;
         dataSet.push({
             query,
             response: {
@@ -50,14 +60,13 @@ exports.get = async(req, res, next) => {
             }
         })
     }
-    response['response_data'] = null;
-    delete response['response_data'];
+    console.log(dataSet)
+
+    // response['response_data'] = null;
+    // delete response['response_data'];
     return res.status(200).json({
         status: true,
-        data: {
-            meta: response,
-            response: dataSet
-        }
+        data: dataSet
     })
 }
 
@@ -163,4 +172,84 @@ exports.getLast30Days = async(req, res, next) => {
         status: true,
         data: [days, counts]
     })
+}
+
+exports.handleDownload = async(req, res, next) => {
+    const queryId = req.params.queryId;
+    const fmt = req.params.fmt;
+
+    console.log(fmt, queryId)
+    let query = await Query.findById(mongoose.Types.ObjectId(queryId));
+    if (!query) {
+        return res.status(200).json({
+            status: false,
+            msg: 'Bot with this id doesnt exist'
+        })
+    }
+    let response = await Response.find({ query: mongoose.Types.ObjectId(queryId) });
+    if (!response) {
+        return res.status(200).json({
+            status: false,
+            msg: 'No response added yet'
+        })
+    }
+
+    response = response.map((value) => value.response_data[0])
+    let queryData = query.query_data[0]
+
+    let finalDataSet = [];
+    let dataSet = [];
+
+    for (let x = 0; x < response.length; x++) {
+        forCSV = [];
+        dataSet = [];
+        console.log('X', response[x])
+        for (let y = 0; y < response[x].length; y++) {
+            // console.log('Y', response[x][y])
+            let selectedValue = null;
+            let textValue = null;
+            const currTier = response[x][y]._path._curr.tier;
+            const currComp = response[x][y]._path._curr.comp;
+            console.log(currTier, currComp)
+            const query = queryData[0].tiers[currTier - 1].components[currComp - 1].query;
+            console.log('QUERY', query)
+            selectedValue = response[x][y].optionValue;
+
+            if (!queryData[0].tiers[currTier - 1].components[currComp - 1].options[response[x][y].selected_opt - 1]._inputMeta) {
+                textValue = null;
+            }
+            textValue = response[x][y].textValue;
+            console.log(query, 'val ->', selectedValue, 'txt Val ->', textValue)
+            forCSV.push({ query })
+            forCSV.push({ response: textValue != null ? textValue : selectedValue })
+            dataSet.push({
+                query,
+                response: {
+                    selectedValue,
+                    textValue
+                }
+            })
+        }
+        finalDataSet.push(dataSet)
+    }
+    console.log(forCSV)
+
+    return res.status(200).json({
+        status: true,
+        data: finalDataSet,
+        csv: forCSV
+    })
+
+
+    if (fmt === 'excel') {
+
+    }
+
+    if (fmt === 'json') {
+
+    }
+
+    if (fmt === 'csv') {
+
+    }
 }

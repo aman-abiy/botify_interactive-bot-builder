@@ -1,20 +1,20 @@
 [{
-    "tier1": {
+        "tier": 1,
         "_hasTextInput": false,
         "_hasOptionInput": true,
-        "selected": "option2",
+        "selected_opt": 2,
         "textValue": null,
         "optionValue": "User",
         "_path": {
             "_curr": { "tier": 1, "comp": 1 },
             "_sentTo": { "tier": 2, "comp": 2 }
         }
-    }
-}, {
-    "tier2": {
+    },
+    {
+        "tier": 2,
         "_hasTextInput": true,
         "_hasOptionInput": false,
-        "selected": "option1",
+        "selected_opt": 1,
         "textValue": "amexabiy@gmail.com",
         "optionValue": "Email",
         "_path": {
@@ -22,4 +22,4 @@
             "_sentTo": { "tier": 3, "comp": 3 }
         }
     }
-}]
+]

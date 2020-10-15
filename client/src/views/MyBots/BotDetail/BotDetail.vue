@@ -90,7 +90,7 @@ export default {
             this.$store.dispatch('changeQueryStatus', this.$route.params.botId)
         },
         copyLink(){
-            this.$toast.open('coppied to clipboard');
+            this.$toast.info('coppied to clipboard');
         }
     },
     created() {
