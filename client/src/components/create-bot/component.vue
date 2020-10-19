@@ -89,7 +89,7 @@
                             <button class="btn col-lg-4" type="button" v-on:click="modals.addInputModal = !modals.addInputModal">Cancel</button>
                             <button class="btn col-lg-4" type="button" v-on:click="modals.addInputModal = !modals.addInputModal; addInput(componentCount[0])">Done</button>
                         </div>
-                    </div>
+                    </div> 
                 </div>
             </div>
         </div>
@@ -148,6 +148,10 @@ export default {
                 _goTo: { tier: this.goTo.tier, comp: this.goTo.comp},
                 _inputMeta: null
             })
+            this.componentObjects[0].tiers[this.currentLevel - 1].components[index - 1]._meta =  {
+                _textInput: false, 
+                _optionInput: true
+            }
             this.$store.commit('set_COMPONENT_LEVEL_DATA', this.componentObjects)
             this.resetValues()
             this.$emit('fromComponent', this.comps);
@@ -161,6 +165,10 @@ export default {
                     _dataType: Object.values(this.inputType).find(element => element != null)
                 }
             })
+            this.componentObjects[0].tiers[this.currentLevel - 1].components[index - 1]._meta =  {
+                _textInput: true, 
+                _optionInput: false
+            }
             this.$store.commit('set_COMPONENT_LEVEL_DATA', this.componentObjects)
             this.resetValues()
             this.$emit('fromComponent', this.comps);

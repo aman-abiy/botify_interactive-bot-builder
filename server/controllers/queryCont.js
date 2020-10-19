@@ -30,8 +30,8 @@ exports.add = async(req, res, next) => {
 
 exports.get = async(req, res, next) => {
     const queryId = req.params.queryId;
-    console.log('Q', req.params.queryId)
-    console.log('S', req.subscriber._id)
+    // console.log('Q', req.params.queryId)
+    // console.log('S', req.subscriber._id)
     const query = await Query.find({ subscriber: mongoose.Types.ObjectId(req.subscriber._id), _id: mongoose.Types.ObjectId(queryId) })
     if (!query) {
         return res.status(200).json({

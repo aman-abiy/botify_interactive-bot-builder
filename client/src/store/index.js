@@ -109,6 +109,17 @@ export default new Vuex.Store({
             }
         },
 
+        addResponse: async({ commit }, payload) => {
+            try {
+                const result = await axios.post(`/response/add/${payload.queryId}`, payload.data);
+                if (result.data.status) {
+                    console.log('RESPONSE ADDED SUCCESSFULLY')
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        },
+
         // BOTS
         // get single Bot
         getQuery: async({ commit }, payload) => {
@@ -126,8 +137,6 @@ export default new Vuex.Store({
         getBotQuery: async({ commit }, payload) => {
             try {
                 const result = await axios.get(`/query/get/${payload}`);
-                console.log(result.data.status)
-                console.log(result.data.data)
                 if (result.data.status) {
                     commit('setBotQuery', result.data.data);
                 }

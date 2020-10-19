@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 
 const ResponseSchema = mongoose.Schema({
-    email: {
-        type: String,
-        trim: true
-    },
-    phone: {
-        type: String,
-        trim: true
-    },
+    // email: {
+    //     type: String,
+    //     trim: true
+    // },
+    // phone: {
+    //     type: String,
+    //     trim: true
+    // },
     response_data: {
         type: [
             [Object]

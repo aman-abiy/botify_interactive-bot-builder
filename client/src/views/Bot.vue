@@ -1,44 +1,84 @@
 <template>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-4 d-none d-lg-block">
-                <a class="navbar-brand" href="#">botapp.com</a>
-            </div>
-            <div class="chat-container col-lg-4 col-md-12 col-sm-12 ">
-                <template  v-for="(child, index) in children">
-                    <component :replyBot="children" :query="botQueries[index]" :component="botQueries[index] ? botQueries[goToTier[index] - 1].components[goToComp[index] - 1] : null " @selectedOption="btnGoToNext($event)" @forInput="forInputValues = $event" :is="child" :key="child.name"></component>
-                    <div v-if="response[index]" class="row reply-user">
-                        <div class="card-container">
-                            <div class="card">
-                                <p>{{ response[index].optionValue ? response[index].optionValue : response[index].textValue }}</p>
+    <div>
+        <div v-if="query[0].status" :class="[theme('dark-theme-bckgrnd', 'light-theme-bckgrnd'), 'container-fluid']">
+            <div class="row">
+                <div class="col-lg-4 d-none d-lg-block">
+                    <a class="navbar-brand" href="#">botapp.com</a>
+                </div>
+                <div :class="[theme('dark-theme-chat-bckgrnd', 'light-theme-chat-bckgrnd') , 'chat-container col-lg-4 col-md-12 col-sm-12']">
+                    <template  v-for="(child, index) in children">
+                        <component :replyBot="children" :query="botQueries[index]" :component="botQueries[index] ? botQueries[goToTier[index] - 1].components[goToComp[index] - 1] : null " @selectedOption="btnGoToNext($event)" @forInput="forInputValues = $event" @hasConvoEnded="hasConvoEnded = $event" :is="child" :key="child.name"></component>
+                        <div v-if="response[index]" class="row reply-user">
+                            <div class="card-container">
+                                <div :class="[theme('dark-theme-chat-bubble-user', 'light-theme-chat-bubble-user'), 'card']">
+                                    <p>{{ response[index].optionValue ? response[index].optionValue : response[index].textValue }}</p>
+                                </div>
                             </div>
+                            <img src="../assets/images/chat-profile-icon2.png" alt="">
                         </div>
-                        <img src="../assets/images/avatars/untitled2.png" alt="">
-                    </div>
-                    <br>
-                    <br>
-                    <br>
-                </template>    
+                        <br>
+                        <br>
+                        <br>
+                    </template>  
+                    <div v-if="showBotIsTyping" class="row reply-bot">
+                        <img src="../assets/images/avatars/untitled5.png" alt="">
+                        <div class="card-container" style="">
+                            <img src="../assets/images/typing-bubble.gif" style="border-radius: 0px 15px 15px 15px" alt="">
+                        </div>
+                    </div>  
+                </div>
             </div>
-        </div>
-        <div v-if="!(JSON.stringify(forInputValues) === '{}')"  class="input-group col-lg-4 col-md-12 col-sm-12 offset-lg-4">
-            <input v-model="textValue" type="text" class="form-control rounded-0" id="validationDefaultUsername" placeholder="Username" aria-describedby="inputGroupPrepend2" required>
-            <div class="input-group-prepend">
-                <input v-on:click="inputGoToNext();" type="submit" value="Submit" class="btn btn-primary btn-sm" id="inputGroupPrepend2">
-            </div>
-        </div>
-        <!-- <input class="form-control col-lg-4 col-md-12 col-sm-12 offset-lg-4" type="text" placeholder="Default input"> -->
 
+            <div v-if="showConvoEndedMsg" class="convo-ended-msg col-lg-4 col-md-12 col-sm-12 offset-lg-4">
+                <p class="text-center">Conversation Ended</p>
+            </div>
+            <div  class="inputs col-lg-4 col-md-12 col-sm-12 offset-lg-4">
+                <ValidationObserver v-slot="{ handleSubmit }">
+                    <form v-if="!(JSON.stringify(forInputValues) === '{}') && !showConvoEndedMsg" v-on:submit.prevent="handleSubmit(inputGoToNext)" class="row">
+                        <div class="col-10" style="padding: 0px">
+                            <ValidationProvider :rules="`${forInputValues.option._inputMeta._dataType === 'Number' ? 'integer' : forInputValues.option._inputMeta._dataType === 'Email' ? 'email' : ''}`" mode="lazy" v-slot="{ errors }">
+                                <span class="error-msg">{{ errors[0] }}</span>
+                                <input v-model="textValue" type="text" :class="[theme('dark-theme-input', 'light-theme-input'), 'form-control col-12 rounded-0']" id="validationDefaultUsername" required>
+                            </ValidationProvider>
+                        </div>
+                        <div class="col-2" style="padding: 0px">
+                            <button type="submit" class="btn btn-primary" id="inputGroupPrepend2">Send</button>
+                        </div>
+                    </form>
+                </ValidationObserver>
+                
+            </div>
+        </div>
+        <div v-if="!query[0].status" class="status-err">
+            <div class="row">
+                <div class="chat-container col-lg-4 col-md-12 col-sm-12 offset-lg-4">
+                    <br>
+                    <p class="status-err-msg">This bot has been either been disabled by owner or has expired and been shut down</p>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
 import replyBot from '../components/bot/reply-bot'
 import replyUser from '../components/bot/reply-user'
+import { ValidationProvider, extend } from 'vee-validate'
+import { integer, email } from 'vee-validate/dist/rules';
+extend('integer', {
+  ...integer,
+  message: 'A numeric value is required'
+});
+
+extend('email', {
+  ...email,
+  message: 'Ooops! That not a valid email'
+});
+
 export default {
     data: function() {
         return {
             children: [replyBot],
-            children2: [replyUser],
+            showBotIsTyping: false,
             // start from second index cuz first item is inserted on 'created()'
             textValue: null,
             optionValue: null,
@@ -48,22 +88,53 @@ export default {
             // this is not based on index but on count starting from 1 (i.e, index + 1)
             goToTier: [1],
             goToComp: [1],
-            forInputValues: {}
+            hasConvoEnded: false,
+            forInputValues: {},
+            showConvoEndedMsg: false
         }
     },
     computed: {
         query() {
             return this.$store.getters.botQuery;
+        },
+        firstTier() {
+            return this.$store.getters.botQuery;
+        }
+    },
+    watch: {
+        hasConvoEnded: {
+            handler(hasConvoEnded) {
+                if(hasConvoEnded) {
+                    this.$store.dispatch('addResponse', { queryId: this.$route.params.id, data: this.response })
+                    this.showConvoEndedMsg = true;
+                }
+            }
         }
     },
     methods: {
         inputGoToNext() {
+            try {
+                let abort = false;
+                if(this.response[0]) {
+                    this.response.forEach((res) => {
+                        if(res._path._curr.tier == this.forInputValues.tierNumber) {
+                            console.log(res._path._curr.tier, this.forInputValues.tierNumber)
+                            abort = true;
+                        }
+                    })
+                    if(abort){
+                        return
+                    }
+                }
+            } catch(TypeError) {
+                console.log('ERRRRRRRRROR')
+            }
             if(!(JSON.stringify(this.forInputValues) === '{}')) {
                 if(this.textValue == '' || this.textValue == null) {
                     this.$toast.info(`Please fill in ${this.forInputValues.selectedValue}`, { duration: 2000, position: 'top-right' });
                     return;
                 }
-                console.log(this.textValue)
+                
                 this.response.push({
                     tier: this.forInputValues.tierNumber,
                     _hasTextInput: this.forInputValues.meta._textInput,
@@ -73,19 +144,43 @@ export default {
                     optionValue: this.forInputValues.meta._optionInput ? this.forInputValues.selectedValue : null,
                     _path: {
                         _curr: { tier: this.forInputValues.tierNumber, comp: 1 },
-                        _sentTo: { tier: this.forInputValues.option._goto.tier, comp: this.forInputValues.option._goto.comp }
+                        _sentTo: { tier: this.forInputValues.option._goTo.tier, comp: this.forInputValues.option._goTo.comp }
                     }
                 })
-                this.botQueries.push(this.$store.getters.botQuery[0].query_data[0][0].tiers[this.forInputValues.tierNumber])
-                this.children.push(replyBot)
-                this.goToTier.push(this.forInputValues.option._goto.tier)
-                this.goToComp.push(this.forInputValues.option._goto.comp)
+                this.showBotIsTyping = true;
+
+                setTimeout(() => {
+                    this.botQueries.push(this.$store.getters.botQuery[0].query_data[0][0].tiers[this.forInputValues.tierNumber])
+                    this.children.push(replyBot)
+                    this.goToTier.push(this.forInputValues.option._goTo.tier)
+                    this.goToComp.push(this.forInputValues.option._goTo.comp)
+                    this.forInputValues = {}
+                    this.textValue = null
+                    this.showBotIsTyping = false;
+                }, 1000)
+                
             }
             
         },
         // accepts the whole tier object, the tier levelNum, optionValue, the index of the component, 
-        btnGoToNext(values) {
-            console.log(values)
+        btnGoToNext(values) {            
+            try {
+                let abort = false;
+                if(this.response[0]) {
+                    this.response.forEach((res) => {
+                        if(res._path._curr.tier == values.tierNumber) {
+                            console.log(res._path._curr.tier, values.tierNumber)
+                            abort = true;
+                        }
+                    })
+                    if(abort){
+                        return
+                    }
+                }
+            } catch(TypeError) {
+
+            }
+
             this.response.push({
                 tier: values.tierNumber,
                 _hasTextInput: values.meta._textInput,
@@ -95,49 +190,86 @@ export default {
                 optionValue: values.meta._optionInput ? values.selectedValue : null,
                 _path: {
                     _curr: { tier: values.tierNumber, comp: 1 },
-                    _sentTo: { tier: values.option._goto.tier, comp: values.option._goto.comp }
+                    _sentTo: { tier: values.option._goTo.tier, comp: values.option._goTo.comp }
                 }
             })
-            this.botQueries.push(this.$store.getters.botQuery[0].query_data[0][0].tiers[values.tierNumber])
-            this.children.push(replyBot)
-            this.goToTier.push(values.option._goto.tier)
-            this.goToComp.push(values.option._goto.comp)
-            // tier, tierLevel, optionValue, index, goTo
-            // let addResponse = true;
-            // if(!this.botQueries[this.botQueries.length - 1].components[0].options[0]._inputMeta) {
-            //     this.response.forEach((val) => { if(val.tier == tierLevel) { addResponse = false } })
-            //     if((this.$store.getters.botQuery[0].query_data[0][0].tiers.length > this.response.length) && addResponse){
-            //         this.response.push({
-            //             tier: tierLevel,
-            //             _hasTextInput: false,
-            //             _hasOptionInput: true,
-            //             selected_opt: index + 1,
-            //             textValue: this.textValue,
-            //             optionValue: optionValue,
-            //             // _path: {
-            //             //     _curr: { tier: 1, comp: 1 },
-            //             //     _sentTo: { tier: 2, comp: 2 }
-            //             // }
-            //         })
-            //     };
-            //     if((this.$store.getters.botQuery[0].query_data[0][0].tiers.length - 1) >= this.index) {
-            //         this.index = this.index + 1;
-            //         console.log(goTo) 
-            //         this.botQueries.push(tier)
-            //         // this.goToComp = goTo.comp;
-            //     }
-            // }
+            this.showBotIsTyping = true;
+
+            setTimeout(() => {
+                this.botQueries.push(this.$store.getters.botQuery[0].query_data[0][0].tiers[values.tierNumber])
+                this.children.push(replyBot)
+                this.goToTier.push(values.option._goTo.tier)
+                this.goToComp.push(values.option._goTo.comp)
+                this.showBotIsTyping = false;
+            }, 1000)
+        },  
+        theme(darkTheme, lightTheme) {
+            return this.query[0].theme == 'dark' ? darkTheme : lightTheme
         }
     },
     created() {
-        this.$store.dispatch('getBotQuery', this.$route.params.id)
-        this.botQueries.push(this.$store.getters.botQuery[0].query_data[0][0].tiers[0])
+        this.$store.dispatch('getBotQuery', this.$route.params.id).then(() => {
+            this.botQueries.push(this.$store.getters.botQuery[0].query_data[0][0].tiers[0])
+        })
+        
     },
 }
 </script>
 <style scoped>
+.light-theme-chat-bubble-user {
+    background-color: #3f76ae;
+    border-color: #3f76ae;
+}
+
+.light-theme-chat-bckgrnd {
+    background-color: rgb(252, 252, 252);
+}
+
+.light-theme-bckgrnd {
+    background-color: #ffffff;
+}
+
+.light-theme-input {
+    border-color: #e8f1fe;
+    background-color: #ffffff;
+}
+
+.light-theme-input:focus {
+    border-color: aqua;
+}
+
+.dark-theme-chat-bubble-user {
+    background-color: #3f76ae;
+    border-color: #3f76ae;
+}
+
+.dark-theme-chat-bckgrnd {
+    background-color: #1f2732;
+}
+
+.dark-theme-bckgrnd {
+    background-color: #293341;
+}
+
+.dark-theme-input {
+    border-color: #4e5d72;
+    background-color: #4e5d72;
+}
+
+.dark-theme-input:focus {
+    color: #3f76ae;
+    border-color: #3f76ae;
+    background-color: #4e5d72;
+}
+
+
+.container-fluid{
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
 .chat-container {
-    background-color: rgb(253, 253, 253);
+    /*background-color: rgb(252, 252, 252);*/
     padding: 20px 10px 10px 10px;
     height: 93vh;
     overflow-y: auto;
@@ -153,7 +285,7 @@ export default {
     font-size: 17px;
     font-weight: 500;
     background-color: rgb(240, 248, 248);
-    border-color: rgb(240, 248, 248);
+    /*border-color: rgb(240, 248, 248);*/
 }
 
 .chat-container .reply-bot .card {
@@ -161,7 +293,7 @@ export default {
 }
 
 .chat-container .reply-user .card {
-    background-color: #2b62fa;
+    background-color: #3f76ae;
     color: rgb(239, 241, 241);
     border-radius: 20px 00px 20px 20px;
 }
@@ -205,8 +337,13 @@ export default {
     float: right;
 }
 
+.chat-container .reply-user img {
+    transform: scale(1.9);
+    margin-right: 5px;
+}
+
 .container-fluid input {
-    border-color: #e8f1fe;
+    border-radius: 5px 0px 0px 5px;
     outline: none !important;
     /* height: 6.5vh; */
     font-family: 'Nunito', sans-serif;
@@ -220,21 +357,34 @@ export default {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.container-fluid .input-group .input-group-prepend input {
-    border-radius: 5px;
+.container-fluid .inputs form .btn {
+    border-radius: 0px 5px 5px 0px;
     background-color: #0a67ca;
+    font-family: 'Nunito', sans-serif;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.container-fluid .inputs form .error-msg {
+    color: black;
+    font-size: 12px;
+}
+
+.convo-ended-msg {
+    background-color: rgb(192, 189, 189);
+    font-family: 'Nunito', sans-serif;
+}
+
+.status-err {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.status-err-msg {
+    background-color: rgb(192, 189, 189);
+    font-family: 'Nunito', sans-serif;
+    padding: 10px;
+}
 </style>
-
-
-
-
-
-
-
-
-
 
 
 

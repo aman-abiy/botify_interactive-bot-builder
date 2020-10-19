@@ -4,18 +4,23 @@ const Query = require('../models/Query');
 const ErrorResponse = require('../utils/errorResponse');
 
 exports.add = async(req, res, next) => {
-    const queryId = req.params.queryId;
+    let queryId = req.params.queryId;
+    queryId = mongoose.Types.ObjectId(queryId);
 
-    req.body.query = mongoose.Types.ObjectId(queryId);
-    let query = await Query.findById(req.body.query);
-    if (!query) {
-        return next(new ErrorResponse(`No related query found for this response`), 200);
-    }
-    const response = await Response.create(req.body);
-    return res.status(200).json({
-        status: true,
-        data: response
-    })
+    req.body = { response_data: req.body, query: queryId }
+        // let query = await Query.findById(req.body.query);
+        // if (!query) {
+        //     return res.status(200).json({
+        //         status: false,
+        //         msg: 'No related query found for this response'
+        //     })
+        // }
+        // console.log('req.body', req.body)
+        // const response = await Response.create(req.body);
+        // return res.status(200).json({
+        //     status: true,
+        //     data: response
+        // })
 }
 
 

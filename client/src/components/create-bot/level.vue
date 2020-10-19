@@ -59,7 +59,8 @@ export default {
             this.levelsObject[0].tiers[this.levelCount[0] - 1].components.push({
                 comp: this.children.length,
                 query: null,
-                options: []
+                options: [],
+                _meta: {}
             })
             this.componentArray = this.levelsObject;
         },
