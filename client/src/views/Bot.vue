@@ -1,5 +1,11 @@
 <template>
     <div>
+        <!--CHECKING FOR CONNECTION STATUS-->
+        <template>
+            <!-- @detected-condition fires when the connectivity status of the device changes -->
+            <offline @detected-condition="handleConnectivityChange">
+            </offline>
+        </template>
         <div v-if="query[0].status" :class="[theme('dark-theme-bckgrnd', 'light-theme-bckgrnd'), 'container-fluid']">
             <div class="row">
                 <div class="col-lg-4 d-none d-lg-block">
@@ -62,6 +68,7 @@
 <script>
 import replyBot from '../components/bot/reply-bot'
 import replyUser from '../components/bot/reply-user'
+import offline from 'v-offline';
 import { ValidationProvider, extend } from 'vee-validate'
 import { integer, email } from 'vee-validate/dist/rules';
 extend('integer', {
@@ -75,6 +82,9 @@ extend('email', {
 });
 
 export default {
+    components: {
+        offline
+    },
     data: function() {
         return {
             children: [replyBot],
@@ -205,6 +215,14 @@ export default {
         },  
         theme(darkTheme, lightTheme) {
             return this.query[0].theme == 'dark' ? darkTheme : lightTheme
+        },
+        handleConnectivityChange(status) {
+            if(status) {
+                this.$toast.open('You are back online', { duration: 10000});
+            }
+            if(!status) {
+                this.$toast.error('You are offline', { duration: 60000});
+            }
         }
     },
     created() {

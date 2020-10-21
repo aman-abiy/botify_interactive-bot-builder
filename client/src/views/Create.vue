@@ -1,5 +1,11 @@
 <template>
     <div class="container">
+        <!--CHECKING FOR CONNECTION STATUS-->
+        <template>
+            <!-- @detected-condition fires when the connectivity status of the device changes -->
+            <offline @detected-condition="handleConnectivityChange">
+            </offline>
+        </template>
         <nav class="navbar navbar-expand-lg fixed-top">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <a v-on:click="goBack()" class="btn btn-preview text-primary nav-link" style="padding: 2px 5px 2px 5px; font-size: 15px; margin-left: 5%">Back</a>
@@ -42,9 +48,10 @@
 import level from '@/components/create-bot/level';
 import navbar from '@/components/navbar';
 import footer from '@/components/footer';
+import offline from 'v-offline';
 export default {
     components: {
-        navbar, level
+        navbar, level, offline
     },
     data: function() {
         return {
@@ -83,6 +90,14 @@ export default {
         },
         complete() {
             this.$router.push({ name: 'Publish' });
+        },
+        handleConnectivityChange(status) {
+            if(status) {
+                this.$toast.open('You are back online', { duration: 10000});
+            }
+            if(!status) {
+                this.$toast.error('You are offline', { duration: 60000});
+            }
         }
     }
 }

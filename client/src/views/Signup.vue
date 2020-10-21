@@ -57,7 +57,8 @@ export default {
     data: function() {
         return {
             email: null,
-            password: null
+            password: null,
+            confirmation: null
         }
     },
     computed: {

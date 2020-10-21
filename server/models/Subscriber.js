@@ -17,6 +17,24 @@ const SubscriberSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    verified: {
+        // 0 -> Not verified, 1 -> verified
+        type: Number,
+        default: 0
+    },
+    verificationToken: {
+        type: String,
+        required: true
+    },
+    pwdResetToken: {
+        type: String,
+        default: null
+    },
+    // deadline time before reset link expires
+    pwdResetTime: {
+        type: Date,
+        default: null
+    },
     createdAt: {
         type: Date,
         default: Date.now()

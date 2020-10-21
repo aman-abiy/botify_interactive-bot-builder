@@ -97,13 +97,6 @@ export default {
         email() {
             return this.$store.getters.email;
         },
-        checkConnection(){
-            if(navigator.onLine){
-                return this.$toast.open('online');
-            }else {
-                return this.$toast.open('coppied to clipboard');
-            }
-        }
     },
     methods: {
         logout() {

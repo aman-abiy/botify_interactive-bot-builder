@@ -14,6 +14,8 @@ export default new Vuex.Store({
         token: localStorage.getItem('token') || null,
         email: null,
         authErrorMessage: null,
+        verificationErrorMessage: null,
+        forgotPasswordMessage: null,
         //chats
         response: null,
         allResponse: null,
@@ -29,6 +31,8 @@ export default new Vuex.Store({
         token: state => state.token,
         email: state => state.email,
         authErrorMessage: state => state.authErrorMessage,
+        verificationErrorMessage: state => state.verificationErrorMessage,
+        forgotPasswordMessage: state => state.forgotPasswordMessage,
         response: state => state.response,
         allResponse: state => state.allResponse,
         query: state => state.query,
@@ -42,6 +46,8 @@ export default new Vuex.Store({
         setToken: (state, payload) => { state.token = payload },
         setEmail: (state, payload) => { state.email = payload },
         setAuthErrorMessage: (state, payload) => { state.authErrorMessage = payload },
+        setVerificationErrorMessage: (state, payload) => { state.verificationErrorMessage = payload },
+        setForgotPasswordMessage: (state, payload) => { state.forgotPasswordMessage = payload },
         //chats
         setResponse: (state, payload) => { state.response = payload },
         setAllResponses: (state, payload) => { state.allResponse = payload },
@@ -57,11 +63,9 @@ export default new Vuex.Store({
         signup: async({ commit }, payload) => {
             try {
                 const result = await axios.post('/auth/signup', { email: payload.email, password: payload.password });
-                if (result.data.status) {
-                    localStorage.setItem('token', result.data.token)
-                    commit('setToken', result.data.token)
+                if ((result.data.status && !result.data.verified) || (!result.data.status && !result.data.verified)) {
                     commit('setEmail', result.data.email)
-                    router.push({ name: 'Dashboard' })
+                    router.push({ name: 'Verify-Account' })
                 }
                 commit('setAuthErrorMessage', result.data.msg)
 
@@ -87,6 +91,40 @@ export default new Vuex.Store({
             localStorage.removeItem('token')
             commit('setToken', null)
             router.push({ name: 'Index' })
+        },
+        verify: async({ commit }, payload) => {
+            const result = await axios.get(`/auth/verify/${payload}`);
+            if (result.data.status) {
+                localStorage.setItem('token', result.data.token)
+                commit('setToken', result.data.token)
+                commit('setEmail', result.data.email)
+                router.push({ name: 'Dashboard' })
+            }
+            commit('setVerificationErrorMessage', result.data.msg)
+        },
+        resendVerification: async({ commit }, payload) => {
+            const result = await axios.get(`/auth/resendVerification/${payload}`);
+            if (result.data.status) {
+                console.log('verification resent')
+            }
+            commit('setVerificationErrorMessage', result.data.msg)
+        },
+        requestPasswordResetLink: async({ commit }, payload) => {
+            const result = await axios.get(`/auth/sendPasswordResetLink/${payload}`);
+            if (result.data.status) {
+                console.log('Link sent')
+                commit('setForgotPasswordMessage', result.data.msg)
+            }
+            console.log('Link not sent')
+
+            commit('setForgotPasswordMessage', result.data.msg)
+        },
+        resetPassword: async({ commit }, payload) => {
+            const result = await axios.post(`/auth/resetPassword/${payload.token}`, { password: payload.password });
+            if (result.data.status) {
+                router.push({ name: 'Login' })
+            }
+            commit('setAuthErrorMessage', result.data.msg)
         },
 
         // RESPONSE

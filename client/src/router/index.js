@@ -30,6 +30,18 @@ const routes = [{
             import ('../views/Signup.vue')
     },
     {
+        path: '/forgot-password',
+        name: 'ForgotPassword',
+        component: () =>
+            import ('../views/ForgotPassword.vue')
+    },
+    {
+        path: '/reset-password/:token',
+        name: 'ResetPassword',
+        component: () =>
+            import ('../views/ResetPassword.vue')
+    },
+    {
         path: '/services',
         name: 'Services',
         component: () =>
@@ -83,6 +95,20 @@ const routes = [{
     },
 
     {
+        path: '/verify-account',
+        name: 'Verify-Account',
+        component: () =>
+            import ('../views/Verify/VerifyAccount.vue'),
+        // beforeEnter: authGuard
+    },
+    {
+        path: '/verify/:token',
+        name: 'Verify',
+        component: () =>
+            import ('../views/Verify/Verify.vue'),
+        // beforeEnter: authGuard
+    },
+    {
         path: '/create',
         name: 'Create',
         component: () =>
@@ -117,6 +143,20 @@ const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes
+})
+
+router.beforeResolve((to, from, next) => {
+    // If this isn't an initial page load.
+    if (to.name) {
+        // Start the route progress bar.
+        NProgress.start()
+    }
+    next()
+})
+
+router.afterEach((to, from) => {
+    // Complete the animation of the route progress bar.
+    NProgress.done()
 })
 
 export default router

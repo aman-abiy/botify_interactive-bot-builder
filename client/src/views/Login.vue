@@ -27,7 +27,7 @@
                                         <small id="emailHelp" class="form-text text-muted">{{ errors[0] }}</small>
                                     </ValidationProvider> 
                                 </div>
-                                <a href="" class="forgot-password">Forgot Password?</a>
+                                <router-link :to="{ name: 'ForgotPassword'}" :class="['forgot-password']">Forgot Password?</router-link>
                                 <button type="submit" class="btn btn-primary col-12">Log In</button>
                             </form>
                         </ValidationObserver>
