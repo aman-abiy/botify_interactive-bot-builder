@@ -46,6 +46,7 @@
 import navbar from '../components/navbar';
 import footer from '../components/footer';
 export default {
+    title: 'Usecases',
     components: {
         navbar, footer
     }

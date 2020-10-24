@@ -7,7 +7,7 @@ const isAuth = async(req, res, next) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         const token = req.headers.authorization.split(' ')[1];
         if (!token) {
-            return next(res.status(200).json({
+            return next(res.status(401).json({
                     status: false,
                     msg: 'User authorization error: error identifying token'
                 }))
@@ -18,7 +18,7 @@ const isAuth = async(req, res, next) => {
             const subscriberId = jwt.verify(token, process.env.JWT_SECRET_KEY);
             const subscriber = await Subscriber.findById(mongoose.Types.ObjectId(subscriberId.id));
             if (!subscriber) {
-                return next(res.status(200).json({
+                return next(res.status(401).json({
                         status: false,
                         msg: 'User authorization error: account not found'
                     }))
@@ -27,14 +27,14 @@ const isAuth = async(req, res, next) => {
             req.subscriber = subscriber;
             return next();
         } catch (error) {
-            return next(res.status(200).json({
+            return next(res.status(401).json({
                     status: false,
                     msg: 'User authorization error: error verifying token'
                 }))
                 // return next(new ErrorResponse('User authorization error: error verifying token', 401))
         }
     }
-    return next(res.status(200).json({
+    return next(res.status(401).json({
         status: false,
         msg: 'User authorization error: header authorization not set'
     }))

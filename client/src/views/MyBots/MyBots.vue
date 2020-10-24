@@ -42,6 +42,7 @@ import navbarDelete from '@/components/navbar-delete';
 import navbar from '@/components/navbar';
 import footer from '@/components/footer';
 export default {
+    title: 'My Bots',
     data: function(){
         return {
             checkboxArray: this.fillCheckboxArray(),

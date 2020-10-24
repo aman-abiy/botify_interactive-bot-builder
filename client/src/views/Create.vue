@@ -25,14 +25,22 @@
         <br>-->
         <br>
         <br>
-        <p>From STORE -> {{componentLevelData}}</p>
+        <!-- <p>From STORE -> {{componentLevelData}}</p> -->
         <!-- <div class="finilize-btns offset-lg-10">
             <div class="row">
                 <a v-on:click="" class="btn btn-preview text-primary" style="padding: 2px 5px 2px 5px; font-size: 15px; ">Preview</a>
                 <a v-on:click="" class="btn btn-complete text-light" style="padding: 2px 5px 2px 5px; font-size: 15px; ">Complete</a>
             </div>
         </div> -->
-        <br>
+        <div class="col-lg-4 offset-lg-8 bot-title">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Bot Title</span>
+                </div>
+                <input v-model="title" type="text" class="form-control">
+            </div>
+            <span v-if="showTitleErrorMsg" class="title-err-msg text-danger">Please add a title</span>
+        </div>
         <div class="row">
             <div class="col-lg-11">
                <template class="row" v-for="(child, index) in children">
@@ -50,6 +58,7 @@ import navbar from '@/components/navbar';
 import footer from '@/components/footer';
 import offline from 'v-offline';
 export default {
+    title: 'Create',
     components: {
         navbar, level, offline
     },
@@ -65,7 +74,9 @@ export default {
                         options: []
                     }]
                 }]
-            }]
+            }],
+            title: null,
+            showTitleErrorMsg: false
         }
     },
     computed: {
@@ -89,7 +100,12 @@ export default {
             this.$router.go(-1);
         },
         complete() {
-            this.$router.push({ name: 'Publish' });
+            if(!this.title) {
+                this.showTitleErrorMsg = true;
+                return;
+            }
+            this.$store.commit('setBotTitle', this.title)
+            this.$router.push({ name: 'Publish' })
         },
         handleConnectivityChange(status) {
             if(status) {
@@ -160,6 +176,34 @@ body {
     margin-top: 5px;
 }
 
+.container .bot-title {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.container .bot-title input, .container .bot-title .input-group-prepend {
+    height: 30px;
+    font-size: 14px;
+}
+
+.container .bot-title .input-group-prepend .input-group-text {
+    background-color:  rgb(240, 248, 248);
+}
+
+.container .bot-title .input-group-prepend span {
+    font-size: 14px;
+}
+
+.container .bot-title input:focus {
+    outline: none !important;
+    box-shadow: none;
+    border-color:  rgb(3, 204, 204);
+}
+
+.bot-title .title-err-msg {
+    font-size: 13px;
+    margin-left: 5px;
+}
 
 .add-buttons {
     position: relative;

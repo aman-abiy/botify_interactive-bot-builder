@@ -1,22 +1,19 @@
 import axios from 'axios';
-import store from '../store'
+import router from '../router'
 
-export default async(to, from, next) => {
-    try {
-        const result = await axios.get('/auth/validateAuth')
-        console.log('result', result)
-        if (!result.data.status) {
-            // localStorage.removeItem('token')
-            next({ name: 'Login' })
+export default {
+    ifNotAuthDeny(to, from, next) {
+        if (!localStorage.getItem('token')) {
+            console.log('not set')
+            router.push({ name: 'Login' })
         }
-    } catch (error) {
+        next();
+    },
 
-        /* if 'isAuth' middleware in backend doesnt sent any response then the 
-           user token/session is valid and user is logged in so continue to next route */
-
-        if (error.response.status === 404) {
-            next()
+    ifAuthDeny(to, from, next) {
+        if (localStorage.getItem('token')) {
+            router.push(from.fullPath)
         }
+        next();
     }
-
 }

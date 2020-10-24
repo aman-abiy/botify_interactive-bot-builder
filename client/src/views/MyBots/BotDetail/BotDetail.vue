@@ -69,6 +69,7 @@
 import navbar from '@/components/navbar';
 import footer from '@/components/footer';
 export default {
+    title: 'Bot Details',
     data: function() {
         return {
             link: '555'   

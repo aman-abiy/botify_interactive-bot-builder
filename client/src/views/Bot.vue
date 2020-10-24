@@ -82,6 +82,7 @@ extend('email', {
 });
 
 export default {
+    title: 'Bot',
     components: {
         offline
     },

@@ -32,6 +32,7 @@
 import navbar from '../components/navbar';
 import footer from '../components/footer';
 export default {
+    title: 'Services',
     components: {
         navbar, footer
     }

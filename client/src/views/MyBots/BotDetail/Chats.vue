@@ -58,6 +58,7 @@ import navbar from '@/components/navbar';
 import footer from '@/components/footer';
 import axios from 'axios';
 export default {
+    title: 'Chats',
     data: function() {
         return{
             selectedId: null

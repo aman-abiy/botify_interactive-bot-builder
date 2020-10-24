@@ -70,6 +70,7 @@
 import navbar from '../components/navbar';
 import footer from '../components/footer';
 export default {
+    title: 'Dashboard',
     data: function() {
         return {
             c: this.allBots,

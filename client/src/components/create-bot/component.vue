@@ -47,15 +47,17 @@
                         <div class="row">
                             <div class="col-lg-8">
                                 <input v-model="texts.buttonTxt" type="text" class="form-control popover-input" placeholder="Enter button text " aria-describedby="button-addon1 ">
+                                <span v-if="btnAndInputErrMsg" class="text-danger goto-err-msg text-center">{{ btnAndInputErrMsg }}</span>
                             </div>
                         </div>
                         <div class="row user-controls">
                             <!--<span class="goto-curr">(L:1, C:2)</span>-->
                             <span class="goto-title">Go to: </span><span class="goto">level</span> <input v-model="goTo.tier" type="text" class="form-control" placeholder="0 "><span class="goto">component</span><input v-model="goTo.comp" type="text" class="form-control" placeholder="0 ">
                         </div>
+                        <span v-if="gotoErrorMsg" class="text-danger goto-err-msg text-center">{{ gotoErrorMsg }}</span>
                         <div class="row modal-controls justify-content-between">
-                            <button class="btn col-lg-4" type="button" v-on:click="modals.addBtnModal = !modals.addBtnModal">Cancel</button>
-                            <button class="btn col-lg-4" type="button" v-on:click="modals.addBtnModal = !modals.addBtnModal; addButton(componentCount[0])">Done</button>
+                            <button class="btn col-lg-4" type="button" v-on:click="modals.addBtnModal = !modals.addBtnModal; gotoErrorMsg = null; btnAndInputErrMsg = null">Cancel</button>
+                            <button class="btn col-lg-4" type="button" v-on:click="addButton(componentCount[0])">Done</button>
                         </div>
                     </div>
                 </div>
@@ -67,10 +69,11 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-lg-8">
-                                <input v-model="texts.inputTxt" type="text" class="form-control popover-input" placeholder="Enter button text " aria-describedby="button-addon1 ">
+                            <div class="col-lg-9">
+                                <input v-model="texts.inputTxt" type="text" class="form-control popover-input" placeholder="Enter input identifier text " aria-describedby="button-addon1 ">
+                                <span v-if="btnAndInputErrMsg" class="text-danger goto-err-msg text-center">{{ btnAndInputErrMsg }}</span>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-3 drop-down-col">
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle col-lg-12" type="button" id="dropdownMenuButton" data-toggle="dropdown">Type</button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -85,9 +88,10 @@
                             <!--<span class="goto-curr">(L:1, C:2)</span>-->
                             <span class="goto-title">Go to: </span><span class="goto">level</span> <input v-model="goTo.tier" type="text" class="form-control" placeholder="0 "><span class="goto">component</span><input v-model="goTo.comp" type="text" class="form-control" placeholder="0 ">
                         </div>
+                        <span v-if="gotoErrorMsg" class="text-danger goto-err-msg text-center">{{ gotoErrorMsg }}</span>
                         <div class="row modal-controls justify-content-between">
-                            <button class="btn col-lg-4" type="button" v-on:click="modals.addInputModal = !modals.addInputModal">Cancel</button>
-                            <button class="btn col-lg-4" type="button" v-on:click="modals.addInputModal = !modals.addInputModal; addInput(componentCount[0])">Done</button>
+                            <button class="btn col-lg-4" type="button" v-on:click="modals.addInputModal = !modals.addInputModal; gotoErrorMsg = null; btnAndInputErrMsg = null">Cancel</button>
+                            <button class="btn col-lg-4" type="button" v-on:click="addInput(componentCount[0])">Done</button>
                         </div>
                     </div> 
                 </div>
@@ -124,7 +128,9 @@ export default {
                 tier: null,
                 comp: null       
             },
-            comps: []
+            comps: [],
+            btnAndInputErrMsg: null,
+            gotoErrorMsg: null
         }
     },
     computed: {
@@ -142,6 +148,18 @@ export default {
             console.log(index, $event.target.value, this.componentObjects[index - 1].query)
         },
         addButton(index) {
+            if(!this.texts.buttonTxt) {
+                this.btnAndInputErrMsg = 'Enter button value'
+                return;
+            }
+            if(!this.goTo.tier || !this.goTo.comp) {
+                this.gotoErrorMsg = "'Go to' values can not be empty";
+                return;
+            }
+            if(isNaN(this.goTo.tier)  || isNaN(this.goTo.comp)) {
+                this.gotoErrorMsg = "'Go to' values can only be numbers";
+                return;
+            }
             this.componentObjects[0].tiers[this.currentLevel - 1].components[index - 1].options.push({
                 opt: ( this.componentObjects[0].tiers[this.currentLevel - 1].components[index - 1].options.length + 1),
                 text: this.texts.buttonTxt,
@@ -155,8 +173,23 @@ export default {
             this.$store.commit('set_COMPONENT_LEVEL_DATA', this.componentObjects)
             this.resetValues()
             this.$emit('fromComponent', this.comps);
+            this.gotoErrorMsg = null;
+            this.btnAndInputErrMsg = null;
+            this.modals.addBtnModal = !this.modals.addBtnModal;
         },
         addInput(index) {
+            if(!this.texts.inputTxt) {
+                this.btnAndInputErrMsg = 'Enter input identifier text'
+                return;
+            }
+            if(!this.goTo.tier || !this.goTo.comp) {
+                this.gotoErrorMsg = "'Go to' can not be empty";
+                return;
+            }
+            if(isNaN(this.goTo.tier)  || isNaN(this.goTo.comp)) {
+                this.gotoErrorMsg = "'Go to' values can only be numbers";
+                return;
+            }
             this.componentObjects[0].tiers[this.currentLevel - 1].components[index - 1].options.push({
                 opt: ( this.componentObjects[0].tiers[this.currentLevel - 1].components[index - 1].options.length + 1),
                 text: this.texts.inputTxt,
@@ -172,6 +205,9 @@ export default {
             this.$store.commit('set_COMPONENT_LEVEL_DATA', this.componentObjects)
             this.resetValues()
             this.$emit('fromComponent', this.comps);
+            this.gotoErrorMsg = null;
+            this.btnAndInputErrMsg = null;
+            this.modals.addInputModal = !this.modals.addInputModal;
         },
         removeComponent(index) {
             console.log("CLICKEEED")
@@ -309,6 +345,10 @@ textarea:focus {
     float: right;
 }
 
+.goto-err-msg {
+    font-size: 12px;
+}
+
 .card .goto input {
     font-size: 13px;
     width: 25px;
@@ -367,6 +407,10 @@ textarea:focus {
 
 .overlay .modal-content .modal-body .popover-input{
     height: 30px;
+}
+
+.overlay .modal-content .modal-body .drop-down-col{
+    padding: 0px 10px 0px 0px;
 }
 
 .overlay .modal-content .modal-body .dropdown-toggle{

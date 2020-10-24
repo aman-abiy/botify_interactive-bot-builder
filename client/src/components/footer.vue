@@ -3,7 +3,7 @@
         <div class="container">
             <hr class="footer-horizontal-separator ">
             <div class="row justify-content-between">
-                <p class="copyright">2020 botapp.com</p>
+                <p class="copyright">{{ new Date().getFullYear() }} botapp.com</p>
                 <p class="version">v1.0.0</p>
             </div>
         </div>

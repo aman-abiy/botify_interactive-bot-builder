@@ -45,11 +45,18 @@ exports.signup = asyncHandler(async(req, res, next) => {
 
     // SEND EMAIL HERE
     const smtp = new SMTP(email, 'botapp - Email verification!',
-        `<body>
-            <h4 style="color: #0a67ca">Please verify your email</h4>
-            <p style="color: #268af5">Click on the link below or copy and paste into browser to verify your account.</p>
-            <a style="color: rgb(5, 211, 211)" href="http://localhost:8080/verify/${verificationToken}">http://localhost:8080/verify/${verificationToken}</a>
-        </body>`);
+        `<html>
+            <head>
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+            </head>
+            <body style="background-color: rgb(250, 250, 250); padding: 10%">
+                <h2 style="color: #0a67ca; font-family: sans-serif; text-align: center">Please verify your email</h4>
+                <p style="color: #268af5; font-size: 17px; text-align: center">Click on the link below or copy and paste into browser to verify your account.</p>
+                <a style="color: rgb(10, 211, 211); font-size: 15px; text-align" href="http://localhost:8080/verify/${verificationToken}">http://localhost:8080/verify/${verificationToken}</a>
+                <br>
+                <p style="text-align: center; font-size: 13px; color: grey;">${new Date().getFullYear()} botapp.com</p>
+            </body>
+        </html>`);
     smtp.send();
     console.log('email sent')
     const token = jwt.sign({ id: subscriber._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.JWT_EXPIRES_IN });
@@ -127,11 +134,18 @@ exports.resendVerificationToken = asyncHandler(async(req, res, next) => {
         await Subscriber.findOneAndUpdate({ email }, { verificationToken: newVerificationToken })
 
         const smtp = new SMTP(email, 'botapp - Resent email verification!',
-            `<body>
-                <h4 style="color: #0a67ca">Please verify your email </h4>
-                <p style="color: #268af5">Click on the link below or copy and paste into browser to verify your account.</p>
-                <a style="color: rgb(5, 211, 211)" href="http://localhost:8080/verify/${newVerificationToken}">http://localhost:8080/verify/${newVerificationToken}</a>
-            </body>`);
+            `<html>
+                <head>
+                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+                </head>
+                <body style="background-color: rgb(250, 250, 250); padding: 10%">
+                    <h2 style="color: #0a67ca; font-family: sans-serif; text-align: center">Please verify your email </h2>
+                    <p style="color: #268af5; font-size: 17px; text-align: center">Click on the link below or copy and paste into browser to verify your account.</p>
+                    <a style="color: rgb(10, 211, 211); font-size: 15px; text-align: center" href="http://localhost:8080/verify/${newVerificationToken}">http://localhost:8080/verify/${newVerificationToken}</a>
+                    <br>
+                    <p style="text-align: center; font-size: 13px; color: grey;">${new Date().getFullYear()} botapp.com</p>
+                </body>
+            </html>`);
         smtp.send();
 
         return res.status(200).json({
@@ -162,11 +176,18 @@ exports.sendPasswordResetLink = asyncHandler(async(req, res, next) => {
         await Subscriber.findOneAndUpdate({ email }, { pwdResetToken: token, pwdResetTime: Date.now() + (1000 * 60 * 30) })
 
         const smtp = new SMTP(email, 'botapp - Reset password!',
-            `<body>
-                <h4 style="color: #0a67ca">Reset your password</h4>
-                <p style="color: #268af5">Click on the link below or copy and paste into browser to set your new password.</p>
-                <a style="color: rgb(5, 211, 211)" href="http://localhost:8080/reset-password/${token}">http://localhost:8080/reset-password/${token}</a>
-            </body>`);
+            `<html>
+                <head>
+                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+                </head>
+                <body style="background-color: rgb(250, 250, 250); padding: 10%">
+                    <h2 style="color: #0a67ca; font-family: sans-serif; text-align: center">Reset your password</h2>
+                    <p style="color: #268af5; font-size: 17px; text-align: center">Click on the link below or copy and paste into browser to set your new password.</p>
+                    <a style="color: rgb(10, 211, 211); font-size: 15px; text-align: center" href="http://localhost:8080/reset-password/${token}">http://localhost:8080/reset-password/${token}</a>
+                    <br>
+                    <p style="text-align: center; font-size: 13px; color: grey;">${new Date().getFullYear()} botapp.com</p>
+                </body>
+            </html>`);
         smtp.send();
 
         return res.status(200).json({

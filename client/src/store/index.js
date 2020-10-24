@@ -25,7 +25,9 @@ export default new Vuex.Store({
         botQuery: null,
         activeQueries: null,
         allQueries: null,
-        COMPONENT_LEVEL_DATA: null
+        COMPONENT_LEVEL_DATA: null,
+        // for transfering bot title from create.vue to publish.vue
+        botTitle: null,
     },
     getters: {
         token: state => state.token,
@@ -41,6 +43,7 @@ export default new Vuex.Store({
         allQueries: state => state.allQueries,
         last30Days: state => state.last30Days,
         COMPONENT_LEVEL_DATA: state => state.COMPONENT_LEVEL_DATA,
+        botTitle: state => state.botTitle,
     },
     mutations: {
         setToken: (state, payload) => { state.token = payload },
@@ -57,7 +60,8 @@ export default new Vuex.Store({
         setBotQuery: (state, payload) => { state.botQuery = payload },
         setActiveQueries: (state, payload) => { state.activeQueries = payload },
         setAllQueries: (state, payload) => { state.allQueries = payload },
-        set_COMPONENT_LEVEL_DATA: (state, payload) => { state.COMPONENT_LEVEL_DATA = payload }
+        set_COMPONENT_LEVEL_DATA: (state, payload) => { state.COMPONENT_LEVEL_DATA = payload },
+        setBotTitle: (state, payload) => { state.botTitle = payload }
     },
     actions: {
         signup: async({ commit }, payload) => {

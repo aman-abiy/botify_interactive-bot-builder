@@ -1,45 +1,44 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Index from '../views/Index'
-import Login from '../views/Login'
-import Signup from '../views/Signup'
-import Services from '../views/Services'
-import Usecases from '../views/Usecases'
 import Dashboard from '../views/Dashboard'
+import store from '../store'
 
 // auth-guard
-import authGuard from './auth-guard.js'
+import authGuard from './auth-guard'
 
 Vue.use(VueRouter)
 
 const routes = [{
         path: '/',
         name: 'Index',
-        component: Index
+        component: Index,
     },
     {
         path: '/login',
         name: 'Login',
         component: () =>
-            import ('../views/Login.vue')
+            import ('../views/Auth/Login.vue'),
+        beforeEnter: authGuard.ifAuthDeny
     },
     {
         path: '/signup',
         name: 'Signup',
         component: () =>
-            import ('../views/Signup.vue')
+            import ('../views/Auth/Signup.vue'),
+        beforeEnter: authGuard.ifAuthDeny
     },
     {
         path: '/forgot-password',
         name: 'ForgotPassword',
         component: () =>
-            import ('../views/ForgotPassword.vue')
+            import ('../views/Auth/ForgotPassword.vue')
     },
     {
         path: '/reset-password/:token',
         name: 'ResetPassword',
         component: () =>
-            import ('../views/ResetPassword.vue')
+            import ('../views/Auth/ResetPassword.vue')
     },
     {
         path: '/services',
@@ -60,22 +59,22 @@ const routes = [{
         path: '/dashboard',
         name: 'Dashboard',
         component: Dashboard,
-        beforeEnter: authGuard
+        // beforeEnter: authGuard.ifNotAuthDeny
     },
     {
         path: '/myBots',
         component: () =>
             import ('../views/MyBots/Parent.vue'),
-        beforeEnter: authGuard,
+        beforeEnter: authGuard.ifNotAuthDeny,
         children: [{
             path: '/',
             name: 'MyBots',
             component: () =>
                 import ('../views/MyBots/MyBots.vue'),
-            beforeEnter: authGuard
+            beforeEnter: authGuard.ifNotAuthDeny
         }, {
             path: 'botDetail/:botId',
-            beforeEnter: authGuard,
+            beforeEnter: authGuard.ifNotAuthDeny,
             component: () =>
                 import ('../views/MyBots/BotDetail/Parent.vue'),
             children: [{
@@ -83,13 +82,13 @@ const routes = [{
                 name: 'BotDetail',
                 component: () =>
                     import ('../views/MyBots/BotDetail/BotDetail.vue'),
-                beforeEnter: authGuard
+                beforeEnter: authGuard.ifNotAuthDeny
             }, {
                 path: 'chats',
                 name: 'Chats',
                 component: () =>
                     import ('../views/MyBots/BotDetail/Chats.vue'),
-                beforeEnter: authGuard
+                beforeEnter: authGuard.ifNotAuthDeny
             }, ]
         }]
     },
@@ -99,28 +98,28 @@ const routes = [{
         name: 'Verify-Account',
         component: () =>
             import ('../views/Verify/VerifyAccount.vue'),
-        // beforeEnter: authGuard
+        // beforeEnter: authGuard.ifNotAuthDeny
     },
     {
         path: '/verify/:token',
         name: 'Verify',
         component: () =>
             import ('../views/Verify/Verify.vue'),
-        // beforeEnter: authGuard
+        // beforeEnter: authGuard.ifNotAuthDeny
     },
     {
         path: '/create',
         name: 'Create',
         component: () =>
             import ('../views/Create.vue'),
-        beforeEnter: authGuard
+        beforeEnter: authGuard.ifNotAuthDeny
     },
     {
         path: '/publish',
         name: 'Publish',
         component: () =>
             import ('../views/Publish.vue'),
-        beforeEnter: authGuard
+        beforeEnter: authGuard.ifNotAuthDeny
     },
     {
         path: '/account',
@@ -136,7 +135,17 @@ const routes = [{
         name: 'Bot',
         component: () =>
             import ('../views/Bot.vue')
+    },
+
+    // 404
+
+    {
+        path: '*',
+        name: '404',
+        component: () =>
+            import ('../views/404.vue')
     }
+
 ]
 
 const router = new VueRouter({

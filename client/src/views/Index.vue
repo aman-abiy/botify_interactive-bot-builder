@@ -60,6 +60,7 @@
 import navbar from '../components/navbar';
 import footer_div from '../components/footer';
 export default {
+    title: 'botapp',
     components: {
         navbar, footer_div
     }
