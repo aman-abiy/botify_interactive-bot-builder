@@ -66,7 +66,7 @@ export default new Vuex.Store({
     actions: {
         signup: async({ commit }, payload) => {
             try {
-                const result = await axios.post('http://localhost:5000/auth/signup', { email: payload.email, password: payload.password });
+                const result = await axios.post('/auth/signup', { email: payload.email, password: payload.password });
                 if ((result.data.status && !result.data.verified) || (!result.data.status && !result.data.verified)) {
                     commit('setEmail', result.data.email)
                     router.push({ name: 'Verify-Account' })
@@ -79,7 +79,7 @@ export default new Vuex.Store({
         },
         login: async({ commit }, payload) => {
             try {
-                const result = await axios.post('http://localhost:5000/auth/login', { email: payload.email, password: payload.password });
+                const result = await axios.post('/auth/login', { email: payload.email, password: payload.password });
                 if (result.data.status) {
                     localStorage.setItem('token', result.data.token)
                     commit('setToken', result.data.token)
@@ -97,7 +97,7 @@ export default new Vuex.Store({
             router.push({ name: 'Index' })
         },
         verify: async({ commit }, payload) => {
-            const result = await axios.get(`http://localhost:5000/auth/verify/${payload}`);
+            const result = await axios.get(`/auth/verify/${payload}`);
             if (result.data.status) {
                 localStorage.setItem('token', result.data.token)
                 commit('setToken', result.data.token)
@@ -107,14 +107,14 @@ export default new Vuex.Store({
             commit('setVerificationErrorMessage', result.data.msg)
         },
         resendVerification: async({ commit }, payload) => {
-            const result = await axios.get(`http://localhost:5000/auth/resendVerification/${payload}`);
+            const result = await axios.get(`/auth/resendVerification/${payload}`);
             if (result.data.status) {
                 console.log('verification resent')
             }
             commit('setVerificationErrorMessage', result.data.msg)
         },
         requestPasswordResetLink: async({ commit }, payload) => {
-            const result = await axios.get(`http://localhost:5000/auth/sendPasswordResetLink/${payload}`);
+            const result = await axios.get(`/auth/sendPasswordResetLink/${payload}`);
             if (result.data.status) {
                 console.log('Link sent')
                 commit('setForgotPasswordMessage', result.data.msg)
@@ -124,7 +124,7 @@ export default new Vuex.Store({
             commit('setForgotPasswordMessage', result.data.msg)
         },
         resetPassword: async({ commit }, payload) => {
-            const result = await axios.post(`http://localhost:5000/auth/resetPassword/${payload.token}`, { password: payload.password });
+            const result = await axios.post(`/auth/resetPassword/${payload.token}`, { password: payload.password });
             if (result.data.status) {
                 router.push({ name: 'Login' })
             }
@@ -135,7 +135,7 @@ export default new Vuex.Store({
         // get single response
         getResponse: async({ commit }, payload) => {
             try {
-                const result = await axios.get(`http://localhost:5000/response/get/${payload}`);
+                const result = await axios.get(`/response/get/${payload}`);
                 commit('setResponse', result.data.data)
             } catch (error) {
                 console.log(error)
@@ -144,7 +144,7 @@ export default new Vuex.Store({
         // get all response only, does not combine with query
         getAllResponse: async({ commit }, payload) => {
             try {
-                const result = await axios.get(`http://localhost:5000/response/getAll/${payload}`);
+                const result = await axios.get(`/response/getAll/${payload}`);
                 commit('setAllResponses', result.data)
             } catch (error) {
                 console.log(error)
@@ -153,7 +153,7 @@ export default new Vuex.Store({
 
         addResponse: async({ commit }, payload) => {
             try {
-                const result = await axios.post(`http://localhost:5000/response/add/${payload.queryId}`, payload.data);
+                const result = await axios.post(`/response/add/${payload.queryId}`, payload.data);
                 if (result.data.status) {
                     console.log('RESPONSE ADDED SUCCESSFULLY')
                 }
@@ -166,7 +166,7 @@ export default new Vuex.Store({
         // get single Bot
         getQuery: async({ commit }, payload) => {
             try {
-                const result = await axios.get(`http://localhost:5000/query/get/${payload}`);
+                const result = await axios.get(`/query/get/${payload}`);
                 if (result.data.status) {
                     commit('setQuery', result.data);
                 }
@@ -178,7 +178,7 @@ export default new Vuex.Store({
         // get query for actual BOT chatting
         getBotQuery: async({ commit }, payload) => {
             try {
-                const result = await axios.get(`http://localhost:5000/query/get/${payload}`);
+                const result = await axios.get(`/query/get/${payload}`);
                 if (result.data.status) {
                     commit('setBotQuery', result.data.data);
                 }
@@ -190,7 +190,7 @@ export default new Vuex.Store({
         // get Active Queries
         getActiveQueries: async({ commit }) => {
             try {
-                const result = await axios.get(`http://localhost:5000/query/getActive`);
+                const result = await axios.get(`/query/getActive`);
                 if (result.data.status) {
                     commit('setActiveQueries', result.data.data);
                 }
@@ -203,7 +203,7 @@ export default new Vuex.Store({
         // get all bots
         getAllQueries: async({ commit }) => {
             try {
-                const result = await axios.get(`http://localhost:5000/query/getAll`);
+                const result = await axios.get(`/query/getAll`);
                 commit('setAllQueries', result.data)
             } catch (error) {
                 console.log(error)
@@ -212,7 +212,7 @@ export default new Vuex.Store({
 
         getLast30Days: async({ commit }, payload) => {
             try {
-                const result = await axios.get(`http://localhost:5000/response/getLast30Days/${payload}`);
+                const result = await axios.get(`/response/getLast30Days/${payload}`);
                 console.log(result.data)
                 commit('setLast30Days', result.data)
             } catch (error) {
@@ -222,7 +222,7 @@ export default new Vuex.Store({
 
         changeQueryStatus: async({ commit }, payload) => {
             try {
-                const result = await axios.put(`http://localhost:5000/query/changeStatus/${payload}`);
+                const result = await axios.put(`/query/changeStatus/${payload}`);
                 commit('setQuery', result.data)
             } catch (error) {
                 console.log(error)
@@ -231,7 +231,7 @@ export default new Vuex.Store({
 
         addQuery: async({ commit }, payload) => {
             try {
-                const result = await axios.post('http://localhost:5000/query/add', payload);
+                const result = await axios.post('/query/add', payload);
                 console.log(result.data.status)
                 if (result.data.status) {
                     router.push({ name: 'BotDetail', params: { 'botId': result.data.data.id } }).catch((err) => {
@@ -251,7 +251,7 @@ export default new Vuex.Store({
 
         deleteQuery: async({ commit }, payload) => {
             try {
-                const result = await axios.delete(`http://localhost:5000/query/delete/${payload}`);
+                const result = await axios.delete(`/query/delete/${payload}`);
                 if (result.data.status) {
                     router.go(0)
                 }
@@ -264,7 +264,7 @@ export default new Vuex.Store({
 
         downloadResponses: async({ commit }, payload) => {
             try {
-                const result = await axios({ method: 'get', url: `http://localhost:5000/response/download/${payload.fmt}/${payload.queryId}` });
+                const result = await axios({ method: 'get', url: `/response/download/${payload.fmt}/${payload.queryId}` });
                 console.log(result.data.data)
                 if (result.data.status) {
                     if (payload.fmt === 'excel') {
@@ -280,7 +280,7 @@ export default new Vuex.Store({
                     }
                     //to download in json format
                     if (payload.fmt === 'json') {
-                        const result = await axios({ method: 'get', url: `http://localhost:5000/response/download/${payload.fmt}/${payload.queryId}`, responseType: 'blob' });
+                        const result = await axios({ method: 'get', url: `/response/download/${payload.fmt}/${payload.queryId}`, responseType: 'blob' });
 
                         var fileURL = window.URL.createObjectURL(new Blob([result.data]));
                         var fileLink = document.createElement('a');
