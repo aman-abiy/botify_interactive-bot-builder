@@ -144,7 +144,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/verify-email.121d6b1b.png"
   },
   {
-    "revision": "18957b3fc59a616753c46647970ee383",
+    "revision": "d6fe84021c66be5aa30783aa42ae8d7d",
     "url": "/index.html"
   },
   {
