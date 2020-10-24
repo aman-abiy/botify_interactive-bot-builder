@@ -74,7 +74,7 @@ export default new Vuex.Store({
                 commit('setAuthErrorMessage', result.data.msg)
 
             } catch (error) {
-                console.log(error)
+                (error)
             }
         },
         login: async({ commit }, payload) => {
@@ -88,7 +88,7 @@ export default new Vuex.Store({
                 }
                 commit('setAuthErrorMessage', result.data.msg)
             } catch (error) {
-                console.log(error)
+                (error)
             }
         },
         logout: ({ commit }) => {
@@ -109,17 +109,17 @@ export default new Vuex.Store({
         resendVerification: async({ commit }, payload) => {
             const result = await axios.get(`/auth/resendVerification/${payload}`);
             if (result.data.status) {
-                console.log('verification resent')
+                ('verification resent')
             }
             commit('setVerificationErrorMessage', result.data.msg)
         },
         requestPasswordResetLink: async({ commit }, payload) => {
             const result = await axios.get(`/auth/sendPasswordResetLink/${payload}`);
             if (result.data.status) {
-                console.log('Link sent')
+                ('Link sent')
                 commit('setForgotPasswordMessage', result.data.msg)
             }
-            console.log('Link not sent')
+            ('Link not sent')
 
             commit('setForgotPasswordMessage', result.data.msg)
         },
@@ -138,7 +138,7 @@ export default new Vuex.Store({
                 const result = await axios.get(`/response/get/${payload}`);
                 commit('setResponse', result.data.data)
             } catch (error) {
-                console.log(error)
+                (error)
             }
         },
         // get all response only, does not combine with query
@@ -147,7 +147,7 @@ export default new Vuex.Store({
                 const result = await axios.get(`/response/getAll/${payload}`);
                 commit('setAllResponses', result.data)
             } catch (error) {
-                console.log(error)
+                (error)
             }
         },
 
@@ -155,10 +155,10 @@ export default new Vuex.Store({
             try {
                 const result = await axios.post(`/response/add/${payload.queryId}`, payload.data);
                 if (result.data.status) {
-                    console.log('RESPONSE ADDED SUCCESSFULLY')
+                    ('RESPONSE ADDED SUCCESSFULLY')
                 }
             } catch (error) {
-                console.log(error)
+                (error)
             }
         },
 
@@ -172,7 +172,7 @@ export default new Vuex.Store({
                 }
                 // show error message
             } catch (error) {
-                console.log(error)
+                (error)
             }
         },
         // get query for actual BOT chatting
@@ -184,7 +184,7 @@ export default new Vuex.Store({
                 }
                 // show error message
             } catch (error) {
-                console.log(error)
+                (error)
             }
         },
         // get Active Queries
@@ -195,9 +195,9 @@ export default new Vuex.Store({
                     commit('setActiveQueries', result.data.data);
                 }
                 // show error
-                console.log(result.data.data)
+                (result.data.data)
             } catch (error) {
-                console.log(error)
+                (error)
             }
         },
         // get all bots
@@ -206,17 +206,17 @@ export default new Vuex.Store({
                 const result = await axios.get(`/query/getAll`);
                 commit('setAllQueries', result.data)
             } catch (error) {
-                console.log(error)
+                (error)
             }
         },
 
         getLast30Days: async({ commit }, payload) => {
             try {
                 const result = await axios.get(`/response/getLast30Days/${payload}`);
-                console.log(result.data)
+                (result.data)
                 commit('setLast30Days', result.data)
             } catch (error) {
-                console.log(error)
+                (error)
             }
         },
 
@@ -225,17 +225,17 @@ export default new Vuex.Store({
                 const result = await axios.put(`/query/changeStatus/${payload}`);
                 commit('setQuery', result.data)
             } catch (error) {
-                console.log(error)
+                (error)
             }
         },
 
         addQuery: async({ commit }, payload) => {
             try {
                 const result = await axios.post('/query/add', payload);
-                console.log(result.data.status)
+                (result.data.status)
                 if (result.data.status) {
                     router.push({ name: 'BotDetail', params: { 'botId': result.data.data.id } }).catch((err) => {
-                        console.log('error');
+                        ('error');
                         router.push({ name: 'BotDetail', params: { 'botId': result.data.data.id } })
                         commit('set_COMPONENT_LEVEL_DATA', null)
                     });
@@ -243,9 +243,9 @@ export default new Vuex.Store({
                 }
                 // show error message
                 router.push({ name: 'Publish' })
-                console.log("QUERRY ADD RESULT +>", result)
+                    ("QUERRY ADD RESULT +>", result)
             } catch (error) {
-                console.log(error)
+                (error)
             }
         },
 
@@ -258,14 +258,14 @@ export default new Vuex.Store({
                 //show error message
                 router.push({ name: 'MyBots' })
             } catch (error) {
-                console.log(error)
+                (error)
             }
         },
 
         downloadResponses: async({ commit }, payload) => {
             try {
                 const result = await axios({ method: 'get', url: `/response/download/${payload.fmt}/${payload.queryId}` });
-                console.log(result.data.data)
+                (result.data.data)
                 if (result.data.status) {
                     if (payload.fmt === 'excel') {
                         try {
@@ -307,7 +307,7 @@ export default new Vuex.Store({
                             document.body.appendChild(fileLink);
 
                             fileLink.click();
-                            console.log(csv);
+                            (csv);
                         } catch (err) {
                             console.error(err);
                         }
@@ -319,7 +319,7 @@ export default new Vuex.Store({
                 //show error message
                 // router.push({ name: 'MyBots' })
             } catch (error) {
-                console.log(error)
+                (error)
             }
         },
     },
