@@ -19,14 +19,14 @@ const routes = [{
         name: 'Login',
         component: () =>
             import ('../views/Auth/Login.vue'),
-        beforeEnter: authGuard.ifAuthDeny
+        // beforeEnter: authGuard.ifAuthDeny
     },
     {
         path: '/signup',
         name: 'Signup',
         component: () =>
             import ('../views/Auth/Signup.vue'),
-        beforeEnter: authGuard.ifAuthDeny
+        // beforeEnter: authGuard.ifAuthDeny
     },
     {
         path: '/forgot-password',
@@ -59,22 +59,22 @@ const routes = [{
         path: '/dashboard',
         name: 'Dashboard',
         component: Dashboard,
-        // beforeEnter: authGuard.ifNotAuthDeny
+        // // beforeEnter: authGuard.ifNotAuthDeny
     },
     {
         path: '/myBots',
         component: () =>
             import ('../views/MyBots/Parent.vue'),
-        beforeEnter: authGuard.ifNotAuthDeny,
+        // beforeEnter: authGuard.ifNotAuthDeny,
         children: [{
             path: '/',
             name: 'MyBots',
             component: () =>
                 import ('../views/MyBots/MyBots.vue'),
-            beforeEnter: authGuard.ifNotAuthDeny
+            // beforeEnter: authGuard.ifNotAuthDeny
         }, {
             path: 'botDetail/:botId',
-            beforeEnter: authGuard.ifNotAuthDeny,
+            // beforeEnter: authGuard.ifNotAuthDeny,
             component: () =>
                 import ('../views/MyBots/BotDetail/Parent.vue'),
             children: [{
@@ -82,13 +82,13 @@ const routes = [{
                 name: 'BotDetail',
                 component: () =>
                     import ('../views/MyBots/BotDetail/BotDetail.vue'),
-                beforeEnter: authGuard.ifNotAuthDeny
+                // beforeEnter: authGuard.ifNotAuthDeny
             }, {
                 path: 'chats',
                 name: 'Chats',
                 component: () =>
                     import ('../views/MyBots/BotDetail/Chats.vue'),
-                beforeEnter: authGuard.ifNotAuthDeny
+                // beforeEnter: authGuard.ifNotAuthDeny
             }, ]
         }]
     },
@@ -98,28 +98,28 @@ const routes = [{
         name: 'Verify-Account',
         component: () =>
             import ('../views/Verify/VerifyAccount.vue'),
-        // beforeEnter: authGuard.ifNotAuthDeny
+        // // beforeEnter: authGuard.ifNotAuthDeny
     },
     {
         path: '/verify/:token',
         name: 'Verify',
         component: () =>
             import ('../views/Verify/Verify.vue'),
-        // beforeEnter: authGuard.ifNotAuthDeny
+        // // beforeEnter: authGuard.ifNotAuthDeny
     },
     {
         path: '/create',
         name: 'Create',
         component: () =>
             import ('../views/Create.vue'),
-        beforeEnter: authGuard.ifNotAuthDeny
+        // beforeEnter: authGuard.ifNotAuthDeny
     },
     {
         path: '/publish',
         name: 'Publish',
         component: () =>
             import ('../views/Publish.vue'),
-        beforeEnter: authGuard.ifNotAuthDeny
+        // beforeEnter: authGuard.ifNotAuthDeny
     },
     {
         path: '/account',

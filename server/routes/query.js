@@ -6,7 +6,7 @@ const queryController = require('../controllers/queryCont');
 
 router.post('/add', isAuth, queryController.add);
 
-router.get('/get/:queryId', isAuth, queryController.get);
+router.get('/get/:queryId', queryController.get);
 
 router.get('/getActive', isAuth, queryController.getActive);
 

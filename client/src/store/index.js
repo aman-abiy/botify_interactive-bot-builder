@@ -323,6 +323,6 @@ export default new Vuex.Store({
             }
         },
     },
-    plugins: [createPersistedState()],
+    // plugins: [createPersistedState()],
     modules: {}
 })
