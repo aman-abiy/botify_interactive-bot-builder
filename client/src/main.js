@@ -13,7 +13,7 @@ import 'vue-toast-notification/dist/theme-default.css';
 import Clipboard from 'v-clipboard'
 import VOffline from 'v-offline';
 
-// axios.defaults.baseURL = 'http://localhost:5000/api';
+axios.defaults.baseURL = 'api';
 
 axios.defaults.headers.common = {
     'Authorization': 'Bearer ' + localStorage.getItem('token') || null,
