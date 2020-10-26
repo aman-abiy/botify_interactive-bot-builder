@@ -38,12 +38,12 @@ app.use('/api/response', responseRoutes);
 //     app.get(/.*/, (req, res) => res.sendFile(`${__dirname}/public/index.html`))
 // }
 // // handle 404
-// app.use((req, res, next) => {
-//     res.status(404).json({
-//         status: false,
-//         msg: '404! Nothing Found!'
-//     })
-// })
+app.use((req, res, next) => {
+    res.status(404).json({
+        status: false,
+        msg: '404! Nothing Found!'
+    })
+})
 
 
 

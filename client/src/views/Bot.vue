@@ -6,6 +6,7 @@
             <offline @detected-condition="handleConnectivityChange">
             </offline>
         </template>
+        {{response}}
         <div v-if="query[0].status" :class="[theme('dark-theme-bckgrnd', 'light-theme-bckgrnd'), 'container-fluid']">
             <div class="row">
                 <div class="col-lg-4 d-none d-lg-block">
@@ -116,7 +117,11 @@ export default {
         hasConvoEnded: {
             handler(hasConvoEnded) {
                 if(hasConvoEnded) {
-                    this.$store.dispatch('addResponse', { queryId: this.$route.params.id, data: this.response })
+                    console.log('FROM WATCHER', this.response)
+                    let payload = { queryId: this.$route.params.id, response_data: this.response }
+                    this.$store.commit('setBotId', this.$route.params.id)
+                    this.$store.commit('setBotResponse', this.response)
+                    this.$store.dispatch('addResponse', payload)
                     this.showConvoEndedMsg = true;
                 }
             }
@@ -229,6 +234,7 @@ export default {
     created() {
         this.$store.dispatch('getBotQuery', this.$route.params.id).then(() => {
             this.botQueries.push(this.$store.getters.botQuery[0].query_data[0][0].tiers[0])
+            console.log(botQueries)
         })
         
     },

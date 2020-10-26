@@ -3,7 +3,7 @@ const router = express.Router();
 
 const responseController = require('../controllers/responseCont')
 
-router.post('/add/:queryId', responseController.add);
+router.post('/add', responseController.add);
 
 router.get('/get/:responseId', responseController.get);
 

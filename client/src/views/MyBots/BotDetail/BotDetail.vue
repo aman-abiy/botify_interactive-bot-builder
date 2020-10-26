@@ -7,8 +7,8 @@
         <br>
         <div class="container">
             <div class="row link-row">
-                <span v-clipboard="() => `http://desolate-reaches-31306.herokuapp.com/bot/${this.$route.params.botId}`" v-on:click="copyLink()" class="offset-lg-7 offset-md-3"><i class="far fa-clone"></i></span>
-                <router-link :to="{name: 'Bot', params: {'id': this.$route.params.botId }}" target="_blank" class="link "> https://localhost:8080/bot/{{ this.$route.params.botId }}</router-link>
+                <span v-clipboard="() => `http://desolate-reaches-31306.herokuapp.com/bot/${this.$route.params.botId}`" v-on:click="copyLink()" class="offset-lg-5 offset-md-3"><i class="far fa-clone"></i></span>
+                <router-link :to="{name: 'Bot', params: {'id': this.$route.params.botId }}" target="_blank" class="link "> http://desolate-reaches-31306.herokuapp.com/bot/{{ this.$route.params.botId }}</router-link>
             </div>
             <div class="row">
                 <div class="col-lg-6">

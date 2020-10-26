@@ -4,23 +4,25 @@ const Query = require('../models/Query');
 const ErrorResponse = require('../utils/errorResponse');
 
 exports.add = async(req, res, next) => {
-    let queryId = req.params.queryId;
-    queryId = mongoose.Types.ObjectId(queryId);
+    let { response_data, queryId } = req.body;
+    console.log(req.body)
 
-    req.body = { response_data: req.body, query: queryId }
-        // let query = await Query.findById(req.body.query);
-        // if (!query) {
-        //     return res.status(200).json({
-        //         status: false,
-        //         msg: 'No related query found for this response'
-        //     })
-        // }
-        // console.log('req.body', req.body)
-        // const response = await Response.create(req.body);
-        // return res.status(200).json({
-        //     status: true,
-        //     data: response
-        // })
+    const queryCasted = mongoose.Types.ObjectId(queryId);
+    req.body.query = queryCasted
+
+    let query = await Query.findById(req.body.query);
+    if (!query) {
+        return res.status(200).json({
+            status: false,
+            msg: 'No related query found for this response'
+        })
+    }
+    console.log('req.body', req.body)
+    const response = await Response.create(req.body);
+    return res.status(200).json({
+        status: true,
+        data: response
+    })
 }
 
 
@@ -47,6 +49,7 @@ exports.get = async(req, res, next) => {
         // console.log('response =>', responseJSON, '\n \n')
     let dataSet = [];
     for (let x = 0; x < responseJSON.length; x++) {
+        console.log(responseJSON[x])
         let selectedValue = null;
         let textValue = null;
         const currTier = responseJSON[x]._path._curr.tier;

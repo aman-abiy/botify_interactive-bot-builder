@@ -28,6 +28,8 @@ export default new Vuex.Store({
         COMPONENT_LEVEL_DATA: null,
         // for transfering bot title from create.vue to publish.vue
         botTitle: null,
+        botId: null,
+        botResponse: null,
     },
     getters: {
         token: state => state.token,
@@ -61,7 +63,11 @@ export default new Vuex.Store({
         setActiveQueries: (state, payload) => { state.activeQueries = payload },
         setAllQueries: (state, payload) => { state.allQueries = payload },
         set_COMPONENT_LEVEL_DATA: (state, payload) => { state.COMPONENT_LEVEL_DATA = payload },
-        setBotTitle: (state, payload) => { state.botTitle = payload }
+        setBotTitle: (state, payload) => { state.botTitle = payload },
+        // for sending response
+        setBotId: (state, payload) => { state.botId = payload },
+        setBotResponse: (state, payload) => { state.botResponse = payload }
+
     },
     actions: {
         signup: async({ commit }, payload) => {
@@ -84,7 +90,7 @@ export default new Vuex.Store({
                     localStorage.setItem('token', result.data.token)
                     commit('setToken', result.data.token)
                     commit('setEmail', result.data.email)
-                    router.push({ name: 'Dashboard' })
+                    router.push({ name: 'Dashboard' }).catch(() => { router.push({ name: 'Dashboard' }) })
                 }
                 commit('setAuthErrorMessage', result.data.msg)
             } catch (error) {
@@ -153,7 +159,8 @@ export default new Vuex.Store({
 
         addResponse: async({ commit }, payload) => {
             try {
-                const result = await axios.post(`/response/add/${payload.queryId}`, payload.data);
+                console.log("PY", payload)
+                const result = await axios.post(`/response/add`, { response_data: payload.response_data, queryId: payload.queryId })
                 if (result.data.status) {
                     console.log('RESPONSE ADDED SUCCESSFULLY')
                 }
@@ -178,7 +185,9 @@ export default new Vuex.Store({
         // get query for actual BOT chatting
         getBotQuery: async({ commit }, payload) => {
             try {
+                console.log(payload)
                 const result = await axios.get(`/query/get/${payload}`);
+                console.log(result)
                 if (result.data.status) {
                     commit('setBotQuery', result.data.data);
                 }
@@ -323,6 +332,6 @@ export default new Vuex.Store({
             }
         },
     },
-    // plugins: [createPersistedState()],
+    plugins: [createPersistedState()],
     modules: {}
 })
