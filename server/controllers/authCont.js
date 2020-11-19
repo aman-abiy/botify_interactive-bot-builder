@@ -52,7 +52,7 @@ exports.signup = asyncHandler(async(req, res, next) => {
             <body style="background-color: rgb(250, 250, 250); padding: 10%">
                 <h2 style="color: #0a67ca; font-family: sans-serif; text-align: center">Please verify your email</h4>
                 <p style="color: #268af5; font-size: 17px; text-align: center">Click on the link below or copy and paste into browser to verify your account.</p>
-                <a style="color: rgb(10, 211, 211); font-size: 15px; text-align" href="http://localhost:8080/verify/${verificationToken}">http://localhost:8080/verify/${verificationToken}</a>
+                <a style="color: rgb(10, 211, 211); font-size: 15px; text-align" href="https://desolate-reaches-31306.herokuapp.com/verify/${verificationToken}">https://desolate-reaches-31306.herokuapp.com/verify/${verificationToken}</a>
                 <br>
                 <p style="text-align: center; font-size: 13px; color: grey;">${new Date().getFullYear()} botapp.com</p>
             </body>
@@ -141,7 +141,7 @@ exports.resendVerificationToken = asyncHandler(async(req, res, next) => {
                 <body style="background-color: rgb(250, 250, 250); padding: 10%">
                     <h2 style="color: #0a67ca; font-family: sans-serif; text-align: center">Please verify your email </h2>
                     <p style="color: #268af5; font-size: 17px; text-align: center">Click on the link below or copy and paste into browser to verify your account.</p>
-                    <a style="color: rgb(10, 211, 211); font-size: 15px; text-align: center" href="http://localhost:8080/verify/${newVerificationToken}">http://localhost:8080/verify/${newVerificationToken}</a>
+                    <a style="color: rgb(10, 211, 211); font-size: 15px; text-align: center" href="https://desolate-reaches-31306.herokuapp.com/verify/${newVerificationToken}">https://desolate-reaches-31306.herokuapp.com/verify/${newVerificationToken}</a>
                     <br>
                     <p style="text-align: center; font-size: 13px; color: grey;">${new Date().getFullYear()} botapp.com</p>
                 </body>
@@ -183,7 +183,7 @@ exports.sendPasswordResetLink = asyncHandler(async(req, res, next) => {
                 <body style="background-color: rgb(250, 250, 250); padding: 10%">
                     <h2 style="color: #0a67ca; font-family: sans-serif; text-align: center">Reset your password</h2>
                     <p style="color: #268af5; font-size: 17px; text-align: center">Click on the link below or copy and paste into browser to set your new password.</p>
-                    <a style="color: rgb(10, 211, 211); font-size: 15px; text-align: center" href="http://localhost:8080/reset-password/${token}">http://localhost:8080/reset-password/${token}</a>
+                    <a style="color: rgb(10, 211, 211); font-size: 15px; text-align: center" href="https://desolate-reaches-31306.herokuapp.com/reset-password/${token}">https://desolate-reaches-31306.herokuapp.com/reset-password/${token}</a>
                     <br>
                     <p style="text-align: center; font-size: 13px; color: grey;">${new Date().getFullYear()} botapp.com</p>
                 </body>

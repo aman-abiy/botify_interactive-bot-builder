@@ -6,7 +6,6 @@
             <offline @detected-condition="handleConnectivityChange">
             </offline>
         </template>
-        {{response}}
         <div v-if="query[0].status" :class="[theme('dark-theme-bckgrnd', 'light-theme-bckgrnd'), 'container-fluid']">
             <div class="row">
                 <div class="col-lg-4 d-none d-lg-block">
@@ -39,22 +38,21 @@
             <div v-if="showConvoEndedMsg" class="convo-ended-msg col-lg-4 col-md-12 col-sm-12 offset-lg-4">
                 <p class="text-center">Conversation Ended</p>
             </div>
-            <div  class="inputs col-lg-4 col-md-12 col-sm-12 offset-lg-4">
-                <ValidationObserver v-slot="{ handleSubmit }">
-                    <form v-if="!(JSON.stringify(forInputValues) === '{}') && !showConvoEndedMsg" v-on:submit.prevent="handleSubmit(inputGoToNext)" class="row">
-                        <div class="col-10" style="padding: 0px">
-                            <ValidationProvider :rules="`${forInputValues.option._inputMeta._dataType === 'Number' ? 'integer' : forInputValues.option._inputMeta._dataType === 'Email' ? 'email' : ''}`" mode="lazy" v-slot="{ errors }">
-                                <span class="error-msg">{{ errors[0] }}</span>
-                                <input v-model="textValue" type="text" :class="[theme('dark-theme-input', 'light-theme-input'), 'form-control col-12 rounded-0']" id="validationDefaultUsername" required>
-                            </ValidationProvider>
+            <ValidationObserver v-slot="{ handleSubmit }">
+                <ValidationProvider :rules="`${forInputValues.option._inputMeta._dataType === 'Number' ? 'integer' : forInputValues.option._inputMeta._dataType === 'Email' ? 'email' : ''}`" mode="lazy" v-slot="{ errors }">
+                    <div  class="inputs col-lg-4 col-md-12 col-sm-12 offset-lg-4">
+                        <span class="error-msg">{{ errors[0] }}</span>
+                            <form v-if="!(JSON.stringify(forInputValues) === '{}') && !showConvoEndedMsg" v-on:submit.prevent="handleSubmit(inputGoToNext)" class="row">
+                                <div class="col-10" style="padding: 0px">
+                                    <input v-model="textValue" type="text" :class="[theme('dark-theme-input', 'light-theme-input'), 'form-control col-12 rounded-0']" id="validationDefaultUsername" required>
+                                </div>
+                                <div class="col-2" style="padding: 0px">
+                                    <button type="submit" class="btn btn-primary" id="inputGroupPrepend2">Send</button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="col-2" style="padding: 0px">
-                            <button type="submit" class="btn btn-primary" id="inputGroupPrepend2">Send</button>
-                        </div>
-                    </form>
-                </ValidationObserver>
-                
-            </div>
+                </ValidationProvider>
+            </ValidationObserver>       
         </div>
         <div v-if="!query[0].status" class="status-err">
             <div class="row">
@@ -119,8 +117,8 @@ export default {
                 if(hasConvoEnded) {
                     console.log('FROM WATCHER', this.response)
                     let payload = { queryId: this.$route.params.id, response_data: this.response }
-                    this.$store.commit('setBotId', this.$route.params.id)
-                    this.$store.commit('setBotResponse', this.response)
+                    // this.$store.commit('setBotId', this.$route.params.id)
+                    // this.$store.commit('setBotResponse', this.response)
                     this.$store.dispatch('addResponse', payload)
                     this.showConvoEndedMsg = true;
                 }
@@ -282,9 +280,9 @@ export default {
 }
 
 .dark-theme-input:focus {
-    color: #3f76ae;
+    color: #121213;
     border-color: #3f76ae;
-    background-color: #4e5d72;
+    background-color: #9a9da0;
 }
 
 
@@ -389,9 +387,9 @@ export default {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.container-fluid .inputs form .error-msg {
+.container-fluid .error-msg {
     color: black;
-    font-size: 12px;
+    font-size: 10px;
 }
 
 .convo-ended-msg {

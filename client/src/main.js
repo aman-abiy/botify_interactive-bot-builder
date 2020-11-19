@@ -13,6 +13,7 @@ import 'vue-toast-notification/dist/theme-default.css';
 import Clipboard from 'v-clipboard'
 import VOffline from 'v-offline';
 
+// axios.defaults.baseURL = 'http://localhost:5000/api';
 axios.defaults.baseURL = 'https://stark-river-64057.herokuapp.com/api';
 
 axios.defaults.headers.common = {

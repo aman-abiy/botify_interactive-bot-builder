@@ -7,7 +7,10 @@
             </offline>
         </template>
         <nav class="navbar navbar-expand-lg fixed-top">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <a v-on:click="goBack()" class="btn btn-preview text-primary nav-link d-lg-none" style="padding: 2px 5px 2px 5px; font-size: 15px; margin-left: 5%">Back</a>
+            <a v-on:click="" class="btn btn-preview text-primary nav-link d-lg-none" style="padding: 2px 5px 2px 5px; font-size: 15px; ">Preview</a>
+            <a v-on:click="complete()" class="btn btn-complete text-light btn-primary nav-link d-lg-none" style="padding: 2px 5px 2px 5px; font-size: 15px; ">Complete</a>
+            <div class="collapse navbar-collapse d-md-none d-sm-none" id="navbarSupportedContent">
                 <a v-on:click="goBack()" class="btn btn-preview text-primary nav-link" style="padding: 2px 5px 2px 5px; font-size: 15px; margin-left: 5%">Back</a>
                 <ul class="navbar-nav offset-lg-8">
                     <li class="nav-item nav-item_auth">

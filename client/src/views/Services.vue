@@ -4,7 +4,6 @@
         <br>
         <br>
         <br>
-        <br>
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 col-md-6 col-sm-12 offset-lg-1">
@@ -31,6 +30,7 @@
 <script>
 import navbar from '../components/navbar';
 import footer from '../components/footer';
+import footer_div from '../components/footer';
 export default {
     title: 'Services',
     components: {
@@ -43,6 +43,10 @@ export default {
     font-weight: 400;
     color: rgb(88, 88, 88);
     font-family: 'Oswald', sans-serif;
+}
+
+.container .col-lg-4 {
+    margin-top: 20px;
 }
 
 </style>

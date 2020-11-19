@@ -9,8 +9,8 @@
         <nav v-if="token" class="navbar nav_auth navbar_auth navbar-expand-lg fixed-top">
             <router-link :to="{ name: 'Dashboard'}" :class="['navbar-brand navbar-brand_auth']">botapp.com</router-link>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <span class="navbar-toggler-icon text-primary"><i class="fas fa-bars text-primary"></i></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav">
                     <li class="nav-item nav-item_auth">
@@ -40,9 +40,9 @@
         <nav v-else class="navbar navbar_without_auth navbar-expand-lg fixed-top">
             <div class="container">
                 <router-link :to="{ name: 'Index'}" :class="['navbar-brand']">botapp.com</router-link>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
+                <button class="navbar-toggler text-primary" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon text-primary"><i class="fas fa-bars text-primary"></i></span>
+                </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ">
@@ -125,7 +125,7 @@ export default {
 .navbar_without_auth {
     height: 10vh;
     color: #161c2d;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(245, 249, 252);
     border-bottom: rgb(239, 241, 241) 2px solid;
     font-family: 'Nunito', sans-serif;
 }
@@ -161,8 +161,17 @@ export default {
     cursor: pointer;
 }
 
+.navbar-collapse {
+    background-color: rgb(245, 249, 252);
+}
+
 .nav-auth-buttons {
     margin-left: 7%;
+}
+
+.navbar-toggler-icon:focus {
+    outline: none !important;
+    box-shadow: none;
 }
 
 .auth-button1 {
